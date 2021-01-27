@@ -10,6 +10,7 @@ function Button(props) {
     border: none;
     outline: none;
     border-radius: 10px;
+    font-weight: 600;
     text-transform: uppercase;
     &:hover {
       background-color: #cecece;

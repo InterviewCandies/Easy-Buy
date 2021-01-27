@@ -8,13 +8,14 @@ const Logo = styled.h1`
 `;
 const Container = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 70px 1fr;
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 const Content = styled.div`
-  text-align: center;
   position: relative;
+  text-align: center;
   width: 100%;
   height: 100%;
 `;
@@ -23,7 +24,7 @@ function Layout(props) {
     <Container>
       <Sidebar></Sidebar>
       <Content>
-        <Logo>
+        <Logo style={{ textAlign: "center" }}>
           <span style={{ color: "#0F56B3" }}>Easy</span>Buy
         </Logo>
         {props.children}
