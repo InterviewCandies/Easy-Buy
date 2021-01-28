@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory, Link } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 import HomeIcon from "../../asset/img/home.svg";
-import HangerIcon from "../../asset/img/remigho-hanger-1.svg";
+import HangerIcon from "../../asset/img/tshirt.svg";
 import ShoeIcon from "../../asset/img/shoe.svg";
 import ToyIcon from "../../asset/img/toy.svg";
 import PhoneIcon from "../../asset/img/cellphone.svg";
@@ -11,7 +12,7 @@ import UserIcon from "../../asset/img/user.svg";
 import SportIcon from "../../asset/img/sport.svg";
 import GithubIcon from "../../asset/img/github.svg";
 import CartIcon from "../../asset/img/cart.svg";
-import { PRIMARY_COLOR } from "../../common";
+import { PRIMARY_COLOR, DEFAULT_COLOR } from "../../common";
 const Icon = styled.img`
   width: 30px;
   height: 30px;
@@ -39,7 +40,7 @@ const NavItem = styled.li`
         pointer-events: none;
     `}
   &:hover {
-    background-color: ${"#e2e2e2"};
+    background-color: ${DEFAULT_COLOR};
   }
 `;
 function Sidebar() {
@@ -50,9 +51,12 @@ function Sidebar() {
       <Nav>
         <NavItem active={currentPath.includes("/all")}>
           <Link to="/all">
-            <Icon src={HomeIcon} alt="home"></Icon>
+            <Icon src={HomeIcon} alt="home" data-tip data-for="home"></Icon>
           </Link>
         </NavItem>
+        <ReactTooltip id="home" place="right">
+          Home
+        </ReactTooltip>
         <NavItem>
           <Link to="/category/clothes">
             <Icon src={HangerIcon} alt="hanger"></Icon>
@@ -70,9 +74,19 @@ function Sidebar() {
         <NavItem>
           <Icon src={SportIcon} alt="sport"></Icon>
         </NavItem>
-        <NavItem>
-          <Icon src={HeartIcon} alt="phone"></Icon>
+        <NavItem active={currentPath.includes("/wishlist")}>
+          <Link to="/wishlist">
+            <Icon
+              src={HeartIcon}
+              alt="wishlist"
+              data-tip
+              data-for="wishlist"
+            ></Icon>
+          </Link>
         </NavItem>
+        <ReactTooltip id="wishlist" place="right">
+          Wishlist
+        </ReactTooltip>
         <NavItem>
           <Icon src={CartIcon} alt="cart"></Icon>
         </NavItem>

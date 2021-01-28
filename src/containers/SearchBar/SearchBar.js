@@ -3,7 +3,6 @@ import styled from "styled-components";
 const Input = styled.input`
   width: 40%;
   padding: 12px 24px;
-  font-family: "DM Serif Display", serif;
   background-color: transparent;
   transition: transform 250ms ease-in-out;
   font-size: 14px;
@@ -23,7 +22,6 @@ const Input = styled.input`
   &::placeholder {
     color: color(#575756 a(0.8));
     letter-spacing: 1.5px;
-    font-family: "DM Serif Display", serif;
   }
 
   &:hover,

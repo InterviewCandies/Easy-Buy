@@ -6,9 +6,19 @@ E-commercial website to buy stuff online. Personal project to learn about Fronte
 
 ### Login
 
-![login](./img/login.png)
-![main](./img/main.png)
-![details](./img/details.png)
+![login](./img/login.PNG)
+
+## Home
+
+![main](./img/main.PNG)
+
+## Product details
+
+![details](./img/details.PNG)
+
+## WishList
+
+![wishlist](./img/wishlist.PNG)
 
 ## Technologies
 
