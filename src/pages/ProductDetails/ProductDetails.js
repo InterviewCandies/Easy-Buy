@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Layout from "../../components/Layout/Layout";
 import Card from "../../components/Card/Card";
+import Loader from "../../components/Loader/Loader";
 import Button from "../../components/Button/Button";
 import { SECONDARY_COLOR } from "../../common";
 import StarICon from "../../asset/img/star.svg";
@@ -105,7 +106,7 @@ const displaySize = (sizes) => {
   return sizes.map((size) => <SizeButton key={size}>{size}</SizeButton>);
 };
 function ProductDetails() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   useEffect(() => {
     fetch("http://www.json-generator.com/api/json/get/cfDTvIOuxu?indent=2")
       .then((response) => response.json())
@@ -113,54 +114,59 @@ function ProductDetails() {
   }, []);
   const url = window.location.pathname;
   const id = url.substring(url.lastIndexOf("/") + 1);
-  const product = products.find((product) => product.id == id);
-  const filteredProducts = products.filter(
-    (p) => p.category === product.category
+  const product = products?.find((product) => product.id == id);
+  const filteredProducts = products?.filter(
+    (p) => p.category === product.category && p.id != product.id
   );
-  const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
-  const relatedProducts = shuffled.slice(0, 5);
+  const shuffled = filteredProducts?.sort(() => 0.5 - Math.random());
+  const relatedProducts = shuffled?.slice(0, 5);
   return (
     <Layout>
-      {product && (
-        <MainCard>
-          <CardImage src={product.image}></CardImage>
-          <CardContent>
-            <CardCategory>{product.category}</CardCategory>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <CardTitle>{product.title}</CardTitle>
-                {displayStar(product?.star)}
+      {products ? (
+        <>
+          <MainCard>
+            <CardImage src={product.image}></CardImage>
+            <CardContent>
+              <CardCategory>{product.category}</CardCategory>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <CardTitle>{product.title}</CardTitle>
+                  {displayStar(product?.star)}
+                </div>
+                <CardPrice>{product.price}</CardPrice>
               </div>
-              <CardPrice>{product.price}</CardPrice>
-            </div>
 
-            {product.size && (
-              <div style={{ display: "flex" }}>
-                {displaySize(product?.sizes)}
-              </div>
-            )}
-            <CardSubtitle>{product.description}</CardSubtitle>
-            <CardActions>
-              <Button>Add to my cart</Button>
-              <Button color={SECONDARY_COLOR}>Add to my wishlist</Button>
-            </CardActions>
-          </CardContent>
-        </MainCard>
+              {product.size && (
+                <div style={{ display: "flex" }}>
+                  {displaySize(product?.sizes)}
+                </div>
+              )}
+              <CardSubtitle>{product.description}</CardSubtitle>
+              <CardActions>
+                <Button>Add to my cart</Button>
+                <Button color={SECONDARY_COLOR}>Add to my wishlist</Button>
+              </CardActions>
+            </CardContent>
+          </MainCard>
+
+          <h3 style={{ marginLeft: "30px", textAlign: "left" }}>
+            Similar products
+          </h3>
+          <Grid>
+            {relatedProducts.map((product) => (
+              <Card product={product} key={product.id}></Card>
+            ))}
+          </Grid>
+        </>
+      ) : (
+        <Loader></Loader>
       )}
-      <h3 style={{ marginLeft: "30px", textAlign: "left" }}>
-        Similar products
-      </h3>
-      <Grid>
-        {relatedProducts.map((product) => (
-          <Card product={product} key={product.id}></Card>
-        ))}
-      </Grid>
     </Layout>
   );
 }

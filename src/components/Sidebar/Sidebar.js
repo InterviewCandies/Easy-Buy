@@ -106,7 +106,9 @@ function Sidebar() {
           </Link>
         </NavItem>
         <NavItem>
-          <Icon src={GithubIcon} alt="github"></Icon>
+          <a href="https://github.com/InterviewCandies" target="_blank">
+            <Icon src={GithubIcon} alt="github"></Icon>
+          </a>
         </NavItem>
       </Nav>
     </div>
