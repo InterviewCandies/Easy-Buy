@@ -57,22 +57,30 @@ function Sidebar() {
         <ReactTooltip id="home" place="right">
           Home
         </ReactTooltip>
-        <NavItem>
-          <Link to="/category/clothes">
+        <NavItem active={currentPath.includes("/clothings")}>
+          <Link to="/category/clothings">
             <Icon src={HangerIcon} alt="hanger"></Icon>
           </Link>
         </NavItem>
-        <NavItem>
-          <Icon src={ShoeIcon} alt="shoe"></Icon>
+        <NavItem active={currentPath.includes("/shoes")}>
+          <Link to="/category/shoes">
+            <Icon src={ShoeIcon} alt="shoe"></Icon>
+          </Link>
         </NavItem>
-        <NavItem>
-          <Icon src={ToyIcon} alt="toy"></Icon>
+        <NavItem active={currentPath.includes("/toy")}>
+          <Link to="/category/toy">
+            <Icon src={ToyIcon} alt="toy"></Icon>
+          </Link>
         </NavItem>
-        <NavItem>
-          <Icon src={PhoneIcon} alt="phone"></Icon>
+        <NavItem active={currentPath.includes("/electronics")}>
+          <Link to="/category/electronics">
+            <Icon src={PhoneIcon} alt="phone"></Icon>
+          </Link>
         </NavItem>
-        <NavItem>
-          <Icon src={SportIcon} alt="sport"></Icon>
+        <NavItem active={currentPath.includes("/sports")}>
+          <Link to="/category/sports">
+            <Icon src={SportIcon} alt="sport"></Icon>
+          </Link>
         </NavItem>
         <NavItem active={currentPath.includes("/wishlist")}>
           <Link to="/wishlist">
@@ -87,8 +95,10 @@ function Sidebar() {
         <ReactTooltip id="wishlist" place="right">
           Wishlist
         </ReactTooltip>
-        <NavItem>
-          <Icon src={CartIcon} alt="cart"></Icon>
+        <NavItem active={currentPath.includes("/cart")}>
+          <Link to="/cart">
+            <Icon src={CartIcon} alt="cart"></Icon>
+          </Link>
         </NavItem>
         <NavItem>
           <Link to="/">

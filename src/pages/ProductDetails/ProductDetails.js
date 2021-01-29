@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Layout from "../../components/Layout/Layout";
 import Card from "../../components/Card/Card";
@@ -6,53 +6,7 @@ import Button from "../../components/Button/Button";
 import { SECONDARY_COLOR } from "../../common";
 import StarICon from "../../asset/img/star.svg";
 import EmptyStarIcon from "../../asset/img/empty-star.svg";
-const relatedProduct = [
-  {
-    id: 1,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 2,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/3-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 3,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 3,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 3,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-];
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -151,51 +105,59 @@ const displaySize = (sizes) => {
   return sizes.map((size) => <SizeButton key={size}>{size}</SizeButton>);
 };
 function ProductDetails() {
-  const product = {
-    id: 1,
-    category: "clothings",
-    star: 3,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-    sizes: ["L", "M", "S", "XL", "XXL"],
-  };
-
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    fetch("http://www.json-generator.com/api/json/get/cfDTvIOuxu?indent=2")
+      .then((response) => response.json())
+      .then((data) => setProducts(data));
+  }, []);
+  const url = window.location.pathname;
+  const id = url.substring(url.lastIndexOf("/") + 1);
+  const product = products.find((product) => product.id == id);
+  const filteredProducts = products.filter(
+    (p) => p.category === product.category
+  );
+  const shuffled = filteredProducts.sort(() => 0.5 - Math.random());
+  const relatedProducts = shuffled.slice(0, 5);
   return (
     <Layout>
-      <MainCard>
-        <CardImage src={product.image}></CardImage>
-        <CardContent>
-          <CardCategory>{product.category}</CardCategory>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <CardTitle>{product.title}</CardTitle>
-              {displayStar(product.star)}
+      {product && (
+        <MainCard>
+          <CardImage src={product.image}></CardImage>
+          <CardContent>
+            <CardCategory>{product.category}</CardCategory>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <CardTitle>{product.title}</CardTitle>
+                {displayStar(product?.star)}
+              </div>
+              <CardPrice>{product.price}</CardPrice>
             </div>
-            <CardPrice>{product.price}</CardPrice>
-          </div>
-          <div style={{ display: "flex" }}>{displaySize(product.sizes)}</div>
-          <CardSubtitle>{product.description}</CardSubtitle>
-          <CardActions>
-            <Button>Add to my cart</Button>
-            <Button color={SECONDARY_COLOR}>Add to my wishlist</Button>
-          </CardActions>
-        </CardContent>
-      </MainCard>
+
+            {product.size && (
+              <div style={{ display: "flex" }}>
+                {displaySize(product?.sizes)}
+              </div>
+            )}
+            <CardSubtitle>{product.description}</CardSubtitle>
+            <CardActions>
+              <Button>Add to my cart</Button>
+              <Button color={SECONDARY_COLOR}>Add to my wishlist</Button>
+            </CardActions>
+          </CardContent>
+        </MainCard>
+      )}
       <h3 style={{ marginLeft: "30px", textAlign: "left" }}>
         Similar products
       </h3>
       <Grid>
-        {relatedProduct.map((product) => (
+        {relatedProducts.map((product) => (
           <Card product={product} key={product.id}></Card>
         ))}
       </Grid>

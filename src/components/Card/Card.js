@@ -87,7 +87,7 @@ function Card({ product }) {
       ></Icon>
       <CardImage src={product.image}></CardImage>
       <CardContent>
-        <CardTitle>{product.title}</CardTitle>
+        <CardTitle>{product.name}</CardTitle>
         <div>
           <CardSubtitle>{product.description}</CardSubtitle>
         </div>
