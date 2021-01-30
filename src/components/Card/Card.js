@@ -4,11 +4,13 @@ import styled from "styled-components";
 import CartIcon from "../../asset/img/cart.svg";
 import HeartIcon from "../../asset/img/heart.svg";
 import HeartPlainIcon from "../../asset/img/empty-heart.svg";
+import Tooltip from "react-tooltip-lite";
 const Container = styled.div`
   background-color: white;
   width: 100%;
   border-radius: 16px;
   position: relative;
+  padding: 8px;
   &:hover {
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   }
@@ -36,7 +38,6 @@ const CardSubtitle = styled.p`
 `;
 const CardContent = styled.div`
   text-align: left;
-  padding: 8px 15px;
 `;
 const CardActions = styled.div`
   display: grid;
@@ -61,14 +62,8 @@ const CartButton = styled.button`
   outline: none;
   border-radius: 10px;
   font-weight: 600;
-  ${Icon} {
-    -webkit-filter: invert(100%) !important;
-  }
   &:hover {
     background-color: #cecece;
-    ${Icon} {
-      -webkit-filter: invert(0) !important;
-    }
     color: #000;
   }
 `;
@@ -78,13 +73,15 @@ function Card({ product }) {
   const history = useHistory();
   return (
     <Container onClick={() => history.push("/product/" + product.id)}>
-      <Icon
-        src={favourite ? HeartIcon : HeartPlainIcon}
-        onClick={(e) => {
-          e.stopPropagation();
-          setFavourite((prevState) => !prevState);
-        }}
-      ></Icon>
+      <Tooltip content="Add to your wishlist" direction="right">
+        <Icon
+          src={favourite ? HeartIcon : HeartPlainIcon}
+          onClick={(e) => {
+            e.stopPropagation();
+            setFavourite((prevState) => !prevState);
+          }}
+        ></Icon>
+      </Tooltip>
       <CardImage src={product.image}></CardImage>
       <CardContent>
         <CardTitle>{product.name}</CardTitle>
@@ -93,7 +90,9 @@ function Card({ product }) {
         </div>
         <CardActions>
           <h3>{product.price}</h3>
-          <CartButton>Buy</CartButton>
+          <Tooltip content="Add to your cart" direction="right">
+            <CartButton>Buy</CartButton>
+          </Tooltip>
         </CardActions>
       </CardContent>
     </Container>

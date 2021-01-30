@@ -4,6 +4,7 @@ import Layout from "../../components/Layout/Layout";
 import Pagination from "../../containers/Pagination/Pagination";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../containers/SearchBar/SearchBar";
+import Tooltip from "react-tooltip-lite";
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -132,6 +133,22 @@ const CardContent = styled.div`
   padding: 8px 15px;
 `;
 
+const CartButton = styled.button`
+  background-color: #0f56b3;
+  padding: 0;
+  width: 100%;
+  color: white;
+  height: 40px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-weight: 600;
+  &:hover {
+    background-color: #cecece !important;
+    color: #000;
+  }
+`;
+
 function CardItem({ product }) {
   return (
     <Container>
@@ -140,7 +157,7 @@ function CardItem({ product }) {
         <CardTitle>{product.title}</CardTitle>
         <CardSubtitle>{product.description}</CardSubtitle>
         <h2>{product.price}</h2>
-        <Button>Buy</Button>
+        <CartButton>Buy</CartButton>
       </CardContent>
     </Container>
   );

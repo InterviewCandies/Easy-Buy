@@ -23,7 +23,7 @@ const MainCard = styled.div`
   grid-template-columns: auto 1fr;
   margin: 30px 70px;
   position: relative;
-  padding: 10px;
+  padding: 20px;
   @media (max-width: 1200px) {
     margin: 30px 30px;
   }
@@ -33,7 +33,7 @@ const MainCard = styled.div`
 `;
 const CardImage = styled.img`
   object-fit: contain;
-  max-width: 400px;
+  max-width: 300px;
   @media (max-width: 1200px) {
     width: 300px;
   }
