@@ -14,7 +14,7 @@ E-commercial website to buy stuff online. Personal project to learn about Fronte
 
 ## Product details
 
-![details](./img/details.PNG)
+![details](./img/detail.PNG)
 
 ## WishList
 
