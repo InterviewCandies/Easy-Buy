@@ -33,3 +33,16 @@
 .react-tooltip-lite-arrow {
   border-color: #333;
 }
+.loPmmL {
+  background-color: rgba(15, 86, 179, 0.5) !important;
+  box-shadow: 0 0 1px 3px rgb(15, 86, 179) !important;
+}
+.ecQQgx {
+  background-color: rgba(15, 86, 179, 0.1) !important;
+}
+
+.ecQQgx:hover:enabled,
+.ecQQgx:focus:enabled {
+  color: #fff;
+  background-color: rgb(15, 86, 179) !important;
+}

@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Layout from "../../components/Layout/Layout";
-
+import Slider from "react-slick";
+import Carousel from "react-elastic-carousel";
+/*
 const products = [
   {
     id: 1,
@@ -112,11 +114,12 @@ const products = [
     price: "$34",
   },
 ];
-
+*/
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  padding: 0px 30px;
+  padding: 0px 40px;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
 `;
 const Container = styled.div`
   display: grid;
@@ -126,9 +129,12 @@ const Container = styled.div`
 const CardItem = styled.div`
   background-color: #fff;
   border-radius: 16px;
+  width: 400px;
   display: grid;
   grid-template-columns: 150px 1fr;
   padding: 10px;
+  height: 250px;
+  align-items: center;
 `;
 const CardImage = styled.img`
   width: 150px;
@@ -160,27 +166,36 @@ const Recipe = styled.div`
   margin: 0px 20px;
   background-color: #fff;
   border-radius: 16px;
+  margin: 0px 20px;
 `;
 function Cart() {
+  const products = JSON.parse(localStorage.getItem("cart") || "[]");
   return (
     <Layout>
-      <Grid>
-        <Container>
-          {products.map((product) => (
-            <CardItem key={product.id}>
-              <CardImage src={product.image}></CardImage>
-              <CardContent>
-                <CardTitle>{product.title}</CardTitle>
-                <CardSubtitle>{product.description}</CardSubtitle>
-                <h2>{product.price}</h2>
-              </CardContent>
-            </CardItem>
-          ))}
-        </Container>
-        <Recipe>
-          <h1>$234</h1>
-        </Recipe>
-      </Grid>
+      <div
+        style={{
+          verticalAlign: "center",
+        }}
+      >
+        <Grid>
+          <Carousel>
+            {products.map((product) => (
+              <CardItem key={product.id}>
+                <CardImage src={product.image}></CardImage>
+                <CardContent>
+                  <CardTitle>{product.name}</CardTitle>
+                  <CardSubtitle>{product.description}</CardSubtitle>
+                  <h2>{product.price}</h2>
+                </CardContent>
+              </CardItem>
+            ))}
+          </Carousel>
+
+          <Recipe>
+            <h1>$234</h1>
+          </Recipe>
+        </Grid>
+      </div>
     </Layout>
   );
 }

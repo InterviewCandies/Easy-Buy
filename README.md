@@ -2,21 +2,21 @@
 
 E-commercial website to buy stuff online. Personal project to learn about Frontend development and practice with React.js
 
-## UI
+## User Interface
 
 ### Login
 
 ![login](./img/login.PNG)
 
-## Home
+### Home
 
 ![main](./img/main.PNG)
 
-## Product details
+### Product details
 
 ![details](./img/detail.PNG)
 
-## WishList
+### WishList
 
 ![wishlist](./img/wishlist.PNG)
 

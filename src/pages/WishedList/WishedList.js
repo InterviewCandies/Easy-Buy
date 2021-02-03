@@ -10,94 +10,7 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   padding-bottom: 30px;
   position: relative;
-  z-index: -1;
 `;
-const products = [
-  {
-    id: 1,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 2,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/3-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 3,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 4,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description:
-      "A shirt, button shirt, button-front, button-front shirt, or button-up shirt could be a garment with a collar and a full-length gap at the front that is fixed mistreatment buttons or shirt studs",
-    price: "$34",
-  },
-  {
-    id: 5,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-  {
-    id: 6,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-  {
-    id: 7,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-  {
-    id: 8,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-  {
-    id: 9,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-  {
-    id: 10,
-    image:
-      "https://freepngimg.com/thumb/dress%20shirt/38-white-dress-shirt-png-image.png",
-    title: "White T-shirt",
-    description: "Supper light",
-    price: "$34",
-  },
-];
 
 const Container = styled.div`
   display: grid;
@@ -131,6 +44,10 @@ const CardSubtitle = styled.p`
 const CardContent = styled.div`
   text-align: left;
   padding: 8px 15px;
+  display: flex;
+  justify-content: center;
+  align-item: center;
+  flex-direction: column;
 `;
 
 const CartButton = styled.button`
@@ -145,7 +62,7 @@ const CartButton = styled.button`
   font-weight: 600;
   &:hover {
     background-color: #cecece !important;
-    color: #000;
+    color: #fff;
   }
 `;
 
@@ -154,7 +71,7 @@ function CardItem({ product }) {
     <Container>
       <CardImage src={product.image}></CardImage>
       <CardContent>
-        <CardTitle>{product.title}</CardTitle>
+        <CardTitle>{product.name}</CardTitle>
         <CardSubtitle>{product.description}</CardSubtitle>
         <h2>{product.price}</h2>
         <CartButton>Buy</CartButton>
@@ -167,6 +84,7 @@ const MAXIMUM_ITEM_PER_PAGE = 10;
 
 function WishedList() {
   const [currentPage, setCurrentPage] = useState(1);
+  const products = JSON.parse(localStorage.getItem("favorite"));
   return (
     <div>
       <Layout>
