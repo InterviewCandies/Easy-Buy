@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../../components/Button/Button";
+import { useForm } from "react-hook-form";
 import Logo from "../../components/Logo/Logo";
 import Lock from "../../asset/img/lock.svg";
 import User from "../../asset/img/user2.svg";
@@ -9,7 +9,7 @@ import ConfirmIcon from "../../asset/img/confirm.svg";
 import { withRouter } from "react-router-dom";
 import { PRIMARY_COLOR } from "../../common";
 
-const Container = styled.div`
+const Container = styled.form`
   background-color: #f0f0f3;
   display: flex;
   justify-content: center;
@@ -63,9 +63,34 @@ const Link = styled.a`
   text-decoration: none;
   color: ${PRIMARY_COLOR};
 `;
+const Button = styled.button`
+  padding: 10px 10px;
+  background-color: #0f56b3;
+  width: 100%;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  &:hover {
+    background-color: #cecece;
+  }
+`;
+const ErrorMessage = styled.span`
+  font-size: 12px;
+  color: #ff0033;
+  padding-top: 5px;
+`;
+
 function Register(props) {
+  const { register, handleSubmit, errors } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
-    <Container>
+    <Container onSubmit={handleSubmit(onSubmit)}>
       <Box>
         <Logo size="3rem"></Logo>
         <Subtitle>Join and buy things at your fingertip</Subtitle>
@@ -74,37 +99,85 @@ function Register(props) {
             <Icon src={User} alt="user"></Icon>
             <Label>Username</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your name" autoFocus></Input>
+          <Input
+            type="text"
+            name="username"
+            placeholder="Type your username"
+            autoFocus
+            ref={register({
+              required: {
+                value: true,
+                message: "This field is required",
+              },
+            })}
+          ></Input>
+          {errors.username && (
+            <ErrorMessage>{errors.username.message}</ErrorMessage>
+          )}
         </FormControl>
         <FormControl>
           <InputLabel>
             <Icon src={EmailIcon} alt="user"></Icon>
             <Label>Email</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your name" autoFocus></Input>
+          <Input
+            type="text"
+            name="email"
+            placeholder="Type your name"
+            ref={register({
+              required: {
+                value: true,
+                message: "This field is required",
+              },
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+          ></Input>
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
         </FormControl>
         <FormControl>
           <InputLabel>
             <Icon src={Lock} alt="lock"></Icon>
             <Label>Password</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your password"></Input>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Type your password"
+            ref={register({
+              required: { value: true, message: "This field is required" },
+              pattern: {
+                value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                message:
+                  "Password has at least 8 characters and consists of at least one uppercase letter, one lowercase letter, one number and one special character",
+              },
+            })}
+          ></Input>
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
         </FormControl>
         <FormControl>
           <InputLabel>
             <Icon src={ConfirmIcon} alt="lock"></Icon>
             <Label>Confirm password</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your password"></Input>
+          <Input
+            type="password"
+            placeholder="Type your password"
+            name="confirmedPassword"
+            ref={register({
+              required: { value: true, message: "This field is required" },
+            })}
+          ></Input>
+          {errors.confirmedPassword && (
+            <ErrorMessage>{errors.confirmedPassword.message}</ErrorMessage>
+          )}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
-          <Button
-            handleClick={() => {
-              props.history.push("/all");
-            }}
-          >
-            Sign up
-          </Button>
+          <Button type="submit">Sign up</Button>
         </FormControl>
         <SmallText>
           Have an account? <Link href="/">Login now</Link>

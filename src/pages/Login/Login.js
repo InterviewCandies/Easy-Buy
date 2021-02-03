@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../../components/Button/Button";
+import { useForm } from "react-hook-form";
 import Logo from "../../components/Logo/Logo";
 import Lock from "../../asset/img/lock.svg";
 import User from "../../asset/img/user2.svg";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { PRIMARY_COLOR } from "../../common";
-const Container = styled.div`
+const Container = styled.form`
   background-color: #f0f0f3;
   display: flex;
   justify-content: center;
@@ -60,9 +60,35 @@ const Link = styled.a`
   text-decoration: none;
   color: ${PRIMARY_COLOR};
 `;
-function Login(props) {
+
+const Button = styled.button`
+  padding: 10px 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: #0f56b3;
+  width: 100%;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  &:hover {
+    background-color: #cecece;
+  }
+`;
+const ErrorMessage = styled.span`
+  font-size: 12px;
+  color: #ff0033;
+  padding-top: 5px;
+`;
+function Login() {
+  const { handleSubmit, errors, register } = useForm();
+  const history = useHistory();
+  const onSubmit = (data) => {
+    history.push("/all");
+  };
   return (
-    <Container>
+    <Container onSubmit={handleSubmit(onSubmit)}>
       <Box>
         <Logo size="3rem"></Logo>
         <Subtitle>Shopping has never been easier before</Subtitle>
@@ -71,23 +97,43 @@ function Login(props) {
             <Icon src={User} alt="user"></Icon>
             <Label>Username</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your name" autoFocus></Input>
+          <Input
+            type="text"
+            name="username"
+            placeholder="Type your name"
+            autoFocus
+            ref={register({
+              required: { value: true, message: "This field is required" },
+            })}
+          ></Input>
+          {errors.username && (
+            <ErrorMessage>{errors.username.message}</ErrorMessage>
+          )}
         </FormControl>
         <FormControl>
           <InputLabel>
             <Icon src={Lock} alt="lock"></Icon>
             <Label>Password</Label>
           </InputLabel>
-          <Input type="text" placeholder="Type your password"></Input>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Type your password"
+            ref={register({
+              required: { value: true, message: "This field is required" },
+              pattern: {
+                value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                message:
+                  "Password has at least 8 characters and consists of at least one uppercase letter, one lowercase letter, one number and one special character",
+              },
+            })}
+          ></Input>
+          {errors.password && (
+            <ErrorMessage>{errors.password.message}</ErrorMessage>
+          )}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
-          <Button
-            handleClick={() => {
-              props.history.push("/all");
-            }}
-          >
-            Shop now
-          </Button>
+          <Button type="submit">Shop now</Button>
         </FormControl>
         <SmallText>
           Don't have an account yet? <Link href="/register">Register now</Link>
@@ -97,4 +143,4 @@ function Login(props) {
   );
 }
 
-export default withRouter(Login);
+export default Login;
