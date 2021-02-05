@@ -14,6 +14,20 @@ import Cart from "./pages/Cart/Cart";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import NotFound from "./pages/NotFound/NotFound";
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        localStorage.getItem("user") ? (
+          <Component {...props}></Component>
+        ) : (
+          <Redirect to={{ pathname: "/", state: props.location }}></Redirect>
+        )
+      }
+    ></Route>
+  );
+};
 function App() {
   return (
     <div className="App">
@@ -21,11 +35,18 @@ function App() {
         <Switch>
           <Route component={Login} path="/" exact></Route>
           <Route component={Register} path="/register"></Route>
-          <Route component={Home} path="/all" exact></Route>
-          <Route component={Category} path="/category/:id" exact></Route>
-          <Route component={ProductDetails} path="/product/:id"></Route>
-          <Route component={WishedList} path="/wishlist"></Route>
-          <Route component={Cart} path="/cart"></Route>
+          <PrivateRoute component={Home} path="/all" exact></PrivateRoute>
+          <PrivateRoute
+            component={Category}
+            path="/category/:id"
+            exact
+          ></PrivateRoute>
+          <PrivateRoute
+            component={ProductDetails}
+            path="/product/:id"
+          ></PrivateRoute>
+          <PrivateRoute component={WishedList} path="/wishlist"></PrivateRoute>
+          <PrivateRoute component={Cart} path="/cart"></PrivateRoute>
           <Route component={NotFound} path="/404"></Route>
           <Redirect to="/404"></Redirect>
         </Switch>

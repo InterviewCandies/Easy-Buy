@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Logo from "../../components/Logo/Logo";
@@ -6,6 +6,8 @@ import Lock from "../../asset/img/lock.svg";
 import User from "../../asset/img/user2.svg";
 import { useHistory } from "react-router-dom";
 import { PRIMARY_COLOR } from "../../common";
+import { db } from "../../service/firebase";
+import { compare } from "../../utils/hashHelper";
 const Container = styled.form`
   background-color: #f0f0f3;
   display: flex;
@@ -84,8 +86,35 @@ const ErrorMessage = styled.span`
 function Login() {
   const { handleSubmit, errors, register } = useForm();
   const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [checking, setChecking] = useState(false);
+
+  const checkCredential = (inputUser, databaseUser) => {
+    if (compare(inputUser.password, databaseUser.password)) {
+      localStorage.setItem("user", databaseUser);
+      history.push("/all");
+      return;
+    }
+    setErrorMessage("User doesn't exist");
+  };
+
   const onSubmit = (data) => {
-    history.push("/all");
+    setErrorMessage("");
+    setChecking(true);
+    try {
+      db()
+        .ref("users")
+        .orderByChild("username")
+        .equalTo(data.username)
+        .once("value", function (snapshot) {
+          snapshot.forEach((user) => {
+            checkCredential(data, user.val());
+            setChecking(false);
+          });
+        });
+    } catch (error) {
+      setChecking(false);
+    }
   };
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -105,10 +134,12 @@ function Login() {
             ref={register({
               required: { value: true, message: "This field is required" },
             })}
+            onChange={() => setErrorMessage("")}
           ></Input>
           {errors.username && (
             <ErrorMessage>{errors.username.message}</ErrorMessage>
           )}
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         </FormControl>
         <FormControl>
           <InputLabel>
@@ -118,6 +149,7 @@ function Login() {
           <Input
             type="password"
             name="password"
+            onChange={() => setErrorMessage("")}
             placeholder="Type your password"
             ref={register({
               required: { value: true, message: "This field is required" },
@@ -133,7 +165,13 @@ function Login() {
           )}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
-          <Button type="submit">Shop now</Button>
+          <Button
+            type="submit"
+            disabled={checking}
+            style={checking ? { backgroundColor: "#cecece" } : null}
+          >
+            Shop now
+          </Button>
         </FormControl>
         <SmallText>
           Don't have an account yet? <Link href="/register">Register now</Link>

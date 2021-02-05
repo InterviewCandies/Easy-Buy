@@ -107,7 +107,12 @@ function Sidebar() {
           </Link>
         </Tooltip>
         <Tooltip content="Sign out" direction="right">
-          <Link to="/">
+          <Link
+            to="/"
+            onClick={() => {
+              localStorage.removeItem("user");
+            }}
+          >
             <NavItem>
               <Icon src={UserIcon} alt="user"></Icon>
             </NavItem>

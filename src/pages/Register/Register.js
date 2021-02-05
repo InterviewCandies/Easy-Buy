@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Logo from "../../components/Logo/Logo";
@@ -8,7 +8,9 @@ import EmailIcon from "../../asset/img/email.svg";
 import ConfirmIcon from "../../asset/img/confirm.svg";
 import { withRouter } from "react-router-dom";
 import { PRIMARY_COLOR } from "../../common";
-
+import { db } from "../../service/firebase";
+import ID from "../../utils/IdGenerator";
+import { hash } from "../../utils/hashHelper";
 const Container = styled.form`
   background-color: #f0f0f3;
   display: flex;
@@ -86,8 +88,44 @@ const ErrorMessage = styled.span`
 
 function Register(props) {
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  const [confirmedError, setConfirmedError] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const checkDuplicateUsername = async (username) => {
+    let duplicate = false;
+    await db()
+      .ref("users")
+      .orderByChild("username")
+      .equalTo(username)
+      .on("value", async function (snapshot) {
+        if (snapshot.exists()) {
+          setUsernameError("That username is taken. Try another");
+          duplicate = true;
+        }
+      });
+    return duplicate;
+  };
+
+  const onSubmit = async (data) => {
+    await setUsernameError("");
+    if (data.password !== data.confirmedPassword) {
+      setConfirmedError(true);
+      return;
+    }
+    try {
+      const duplicate = await checkDuplicateUsername(data.username);
+      if (duplicate) return;
+      await db()
+        .ref("users")
+        .child(ID())
+        .update({
+          username: data.username,
+          password: hash(data.password),
+          email: data.email,
+        });
+    } catch (err) {
+      console.log(err);
+    }
+    setConfirmedError(false);
   };
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -104,6 +142,7 @@ function Register(props) {
             name="username"
             placeholder="Type your username"
             autoFocus
+            onChange={() => setUsernameError("")}
             ref={register({
               required: {
                 value: true,
@@ -114,6 +153,7 @@ function Register(props) {
           {errors.username && (
             <ErrorMessage>{errors.username.message}</ErrorMessage>
           )}
+          {usernameError && <ErrorMessage>{usernameError}</ErrorMessage>}
         </FormControl>
         <FormControl>
           <InputLabel>
@@ -172,8 +212,8 @@ function Register(props) {
               required: { value: true, message: "This field is required" },
             })}
           ></Input>
-          {errors.confirmedPassword && (
-            <ErrorMessage>{errors.confirmedPassword.message}</ErrorMessage>
+          {confirmedError && (
+            <ErrorMessage>{"Need to match the password below"}</ErrorMessage>
           )}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
