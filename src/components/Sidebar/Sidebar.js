@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory, Link } from "react-router-dom";
 import ReactTooltip from "react-tooltip";
-import Tooltip from "react-tooltip-lite";
+import { Tooltip } from "@material-ui/core";
 import HomeIcon from "../../asset/img/home.svg";
 import HangerIcon from "../../asset/img/tshirt.svg";
 import ShoeIcon from "../../asset/img/shoe.svg";
@@ -50,63 +50,63 @@ function Sidebar() {
   return (
     <div>
       <Nav>
-        <Tooltip content="Home" direction="right">
+        <Tooltip title="Home" placement="right">
           <Link to="/all">
             <NavItem active={currentPath.includes("/all")}>
               <Icon src={HomeIcon} alt="home"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Clothings" direction="right">
+        <Tooltip title="Clothings" placement="right">
           <Link to="/category/clothings">
             <NavItem active={currentPath.includes("/clothings")}>
               <Icon src={HangerIcon} alt="hanger"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-
-        <Tooltip content="Shoes" direction="right">
+        <Tooltip title="Shoes" placement="right">
           <Link to="/category/shoes">
             <NavItem active={currentPath.includes("/shoes")}>
               <Icon src={ShoeIcon} alt="shoe"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Toy" direction="right">
+        <Tooltip title="Toy" placement="right">
           <Link to="/category/toy">
             <NavItem active={currentPath.includes("/toy")}>
               <Icon src={ToyIcon} alt="toy"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Electronics" direction="right">
+        <Tooltip title="Electronics" placement="right">
           <Link to="/category/electronics">
             <NavItem active={currentPath.includes("/electronics")}>
               <Icon src={PhoneIcon} alt="phone"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Sports" direction="right"></Tooltip>
-        <Link to="/category/sports">
-          <NavItem active={currentPath.includes("/sports")}>
-            <Icon src={SportIcon} alt="sport"></Icon>
-          </NavItem>
-        </Link>
-        <Tooltip content="Wishlist" direction="right">
+        <Tooltip title="Sports" placement="right">
+          <Link to="/category/sports">
+            <NavItem active={currentPath.includes("/sports")}>
+              <Icon src={SportIcon} alt="sport"></Icon>
+            </NavItem>
+          </Link>
+        </Tooltip>
+        <Tooltip title="Wishlist" placement="right">
           <Link to="/wishlist">
             <NavItem active={currentPath.includes("/wishlist")}>
               <Icon src={HeartIcon} alt="wishlist"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Shopping cart" direction="right">
+        <Tooltip title="Shopping cart" placement="right">
           <Link to="/cart">
             <NavItem active={currentPath.includes("/cart")}>
               <Icon src={CartIcon} alt="cart"></Icon>
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Sign out" direction="right">
+        <Tooltip title="Sign out" placement="right">
           <Link
             to="/"
             onClick={() => {
@@ -118,7 +118,7 @@ function Sidebar() {
             </NavItem>
           </Link>
         </Tooltip>
-        <Tooltip content="Github" direction="right">
+        <Tooltip title="Github" placement="right">
           <a href="https://github.com/InterviewCandies" target="_blank">
             <NavItem>
               <Icon src={GithubIcon} alt="github"></Icon>

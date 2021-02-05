@@ -4,7 +4,7 @@ import styled from "styled-components";
 import CartIcon from "../../asset/img/cart.svg";
 import HeartIcon from "../../asset/img/heart.svg";
 import HeartPlainIcon from "../../asset/img/empty-heart.svg";
-import Tooltip from "react-tooltip-lite";
+import { Tooltip } from "@material-ui/core";
 const Container = styled.div`
   background-color: white;
   width: 100%;
@@ -99,8 +99,8 @@ function Card({ product }) {
   return (
     <Container onClick={() => history.push("/product/" + product.id)}>
       <Tooltip
-        content={favourite ? "Remove from wishlist" : "Add to your wishlist"}
-        direction="right"
+        title={favourite ? "Remove from wishlist" : "Add to your wishlist"}
+        placement="right"
       >
         <Icon
           src={favourite ? HeartIcon : HeartPlainIcon}
@@ -120,9 +120,9 @@ function Card({ product }) {
         <CardActions>
           <h3>{product.price}</h3>
           <Tooltip
-            content="Add to my cart"
-            direction="right"
-            useHover={!isInCart(product.id)}
+            title="Add to my cart"
+            placement="right"
+            disableHoverListener={isInCart(product.id)}
           >
             <CartButton
               style={isInCart(product.id) ? { backgroundColor: "#cecece" } : {}}
