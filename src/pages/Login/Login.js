@@ -87,6 +87,7 @@ function Login() {
   const { handleSubmit, errors, register } = useForm();
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [checking, setChecking] = useState(false);
 
   const checkCredential = (inputUser, databaseUser) => {
@@ -95,26 +96,30 @@ function Login() {
       history.push("/all");
       return;
     }
-    setErrorMessage("User doesn't exist");
+    setPasswordError("Wrong password. Try again");
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setErrorMessage("");
+    setPasswordError("");
     setChecking(true);
     try {
-      db()
+      await db()
         .ref("users")
         .orderByChild("username")
         .equalTo(data.username)
-        .once("value", function (snapshot) {
-          snapshot.forEach((user) => {
-            checkCredential(data, user.val());
-            setChecking(false);
-          });
+        .once("value", async function (snapshot) {
+          if (snapshot.exists()) {
+            snapshot.forEach(async (user) => {
+              await checkCredential(data, user.val());
+              setChecking(false);
+            });
+          } else setErrorMessage("User doesn't exist");
         });
     } catch (error) {
-      setChecking(false);
+      //setChecking(false);
     }
+    setChecking(false);
   };
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -149,7 +154,7 @@ function Login() {
           <Input
             type="password"
             name="password"
-            onChange={() => setErrorMessage("")}
+            onChange={() => setPasswordError("")}
             placeholder="Type your password"
             ref={register({
               required: { value: true, message: "This field is required" },
@@ -163,6 +168,7 @@ function Login() {
           {errors.password && (
             <ErrorMessage>{errors.password.message}</ErrorMessage>
           )}
+          {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
           <Button
