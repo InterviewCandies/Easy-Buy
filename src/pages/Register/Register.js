@@ -106,22 +106,34 @@ function Register(props) {
   };
 
   const onSubmit = async (data) => {
-    await setUsernameError("");
     if (data.password !== data.confirmedPassword) {
       setConfirmedError(true);
+      setUsernameError("");
       return;
     }
     try {
       const duplicate = await checkDuplicateUsername(data.username);
-      if (duplicate) return;
-      await db()
-        .ref("users")
-        .child(ID())
-        .update({
-          username: data.username,
-          password: hash(data.password),
-          email: data.email,
-        });
+      console.log(duplicate);
+      if (!duplicate) {
+        await setUsernameError("");
+        await db()
+          .ref("users")
+          .child(ID())
+          .update(
+            {
+              username: data.username,
+              password: hash(data.password),
+              email: data.email,
+            },
+            function (error) {
+              if (error) {
+                setUsernameError("Something went wrong");
+              } else {
+                props.history.push("/all");
+              }
+            }
+          );
+      }
     } catch (err) {
       console.log(err);
     }

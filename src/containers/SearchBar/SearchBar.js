@@ -34,10 +34,18 @@ const Input = styled.input`
     background-position: 100% center;
   }
 `;
-function SearchBar() {
+function SearchBar({ value, onChange }) {
+  const handleChange = (e) => {
+    onChange(e.target.value);
+  };
   return (
     <div>
-      <Input type="text" placeholder="Search here"></Input>
+      <Input
+        type="text"
+        placeholder="Search here"
+        value={value}
+        onChange={handleChange}
+      ></Input>
     </div>
   );
 }

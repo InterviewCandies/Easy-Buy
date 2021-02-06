@@ -92,7 +92,7 @@ function Login() {
 
   const checkCredential = (inputUser, databaseUser) => {
     if (compare(inputUser.password, databaseUser.password)) {
-      localStorage.setItem("user", databaseUser);
+      localStorage.setItem("user", databaseUser.username);
       history.push("/all");
       return;
     }

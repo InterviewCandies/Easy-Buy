@@ -18,20 +18,31 @@ const MAXIMUM_ITEM_PER_PAGE = 10;
 
 function Home() {
   const [products, setProducts] = useState(null);
+  const [queryKey, setQueryKey] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     fetch("http://www.json-generator.com/api/json/get/cfDTvIOuxu?indent=2")
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);
-  const [currentPage, setCurrentPage] = useState(1);
-  const filterProducts = products?.slice(
+
+  const filteredProducts = products?.filter((product) =>
+    product.name.toLocaleLowerCase().includes(queryKey.toLocaleLowerCase())
+  );
+
+  const currentProducts = filteredProducts?.slice(
     (currentPage - 1) * MAXIMUM_ITEM_PER_PAGE,
     Math.min(currentPage * MAXIMUM_ITEM_PER_PAGE, products.length)
   );
+
   return (
     <Layout>
-      <SearchBar></SearchBar>
-      {products ? (
+      <SearchBar
+        value={queryKey}
+        onChange={(text) => setQueryKey(text)}
+      ></SearchBar>
+      {filteredProducts ? (
         <>
           <div
             style={{
@@ -42,14 +53,14 @@ function Home() {
           >
             <Pagination
               itemsPerPage={MAXIMUM_ITEM_PER_PAGE}
-              datasetSize={products.length}
+              datasetSize={filteredProducts.length}
               currentPage={currentPage}
               onChange={(e) => setCurrentPage(e)}
             ></Pagination>
           </div>
 
           <Grid>
-            {filterProducts.map((product) => (
+            {currentProducts.map((product) => (
               <Card key={product.id} product={product}></Card>
             ))}
           </Grid>

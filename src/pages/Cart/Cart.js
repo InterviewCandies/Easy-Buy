@@ -47,12 +47,12 @@ const CardContent = styled.div`
   padding: 8px 15px;
 `;
 const Recipe = styled.div`
-  width: 400px;
   padding: 10px;
   margin: 0px 20px;
   background-color: #fff;
   border-radius: 16px;
-  margin: 0px 20px;
+  margin: 20px auto;
+  text-align: left;
   @media (max-width: 400px) {
     width: 300px;
   }
@@ -67,6 +67,7 @@ const Container = styled.div`
   }
 `;
 function Cart() {
+  console.log(localStorage.getItem("user"));
   const products = JSON.parse(localStorage.getItem("cart") || "[]");
   return (
     <Layout>
@@ -77,7 +78,9 @@ function Cart() {
       >
         <Grid>
           <Recipe>
+            <CardSubtitle>Bill to {localStorage.getItem("user")}</CardSubtitle>
             <CardTitle>Total: $234</CardTitle>
+            <p>{"Date: " + Date.now()}</p>
           </Recipe>
           <Carousel>
             {products.map((product) => (

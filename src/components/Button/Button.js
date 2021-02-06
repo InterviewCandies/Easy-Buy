@@ -17,7 +17,13 @@ function Button(props) {
     }
   `;
   return (
-    <StyledButton onClick={props.handleClick}>{props.children}</StyledButton>
+    <StyledButton
+      onClick={props.handleClick}
+      disabled={props.disabled || false}
+      style={props.disabled ? { background: "#cecece" } : null}
+    >
+      {props.children}
+    </StyledButton>
   );
 }
 

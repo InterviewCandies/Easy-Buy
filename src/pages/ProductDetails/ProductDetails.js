@@ -7,6 +7,12 @@ import Button from "../../components/Button/Button";
 import { SECONDARY_COLOR } from "../../common";
 import StarICon from "../../asset/img/star.svg";
 import EmptyStarIcon from "../../asset/img/empty-star.svg";
+import {
+  addToCart,
+  addToWishlist,
+  isInCart,
+  isInWishList,
+} from "../../utils/checkStorageHelper";
 
 const Grid = styled.div`
   display: grid;
@@ -107,6 +113,8 @@ const displaySize = (sizes) => {
 };
 function ProductDetails() {
   const [products, setProducts] = useState(null);
+  const [, forceUpdate] = useState(false);
+
   useEffect(() => {
     fetch("http://www.json-generator.com/api/json/get/cfDTvIOuxu?indent=2")
       .then((response) => response.json())
@@ -149,8 +157,25 @@ function ProductDetails() {
               )}
               <CardSubtitle>{product.description}</CardSubtitle>
               <CardActions>
-                <Button>Add to my cart</Button>
-                <Button color={SECONDARY_COLOR}>Add to my wishlist</Button>
+                <Button
+                  disabled={isInCart(product.id)}
+                  handleClick={() => {
+                    addToCart(product);
+                    forceUpdate((it) => !it);
+                  }}
+                >
+                  Add to my cart
+                </Button>
+                <Button
+                  disabled={isInWishList(product.id)}
+                  color={SECONDARY_COLOR}
+                  handleClick={() => {
+                    addToWishlist(product);
+                    forceUpdate((it) => !it);
+                  }}
+                >
+                  Add to my wishlist
+                </Button>
               </CardActions>
             </CardContent>
           </MainCard>
