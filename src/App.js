@@ -14,6 +14,7 @@ import Cart from "./pages/Cart/Cart";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import NotFound from "./pages/NotFound/NotFound";
+import { SnackbarProvider } from "notistack";
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
@@ -30,28 +31,33 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 };
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <Switch>
-          <Route component={Login} path="/" exact></Route>
-          <Route component={Register} path="/register"></Route>
-          <PrivateRoute component={Home} path="/all" exact></PrivateRoute>
-          <PrivateRoute
-            component={Category}
-            path="/category/:id"
-            exact
-          ></PrivateRoute>
-          <PrivateRoute
-            component={ProductDetails}
-            path="/product/:id"
-          ></PrivateRoute>
-          <PrivateRoute component={WishedList} path="/wishlist"></PrivateRoute>
-          <PrivateRoute component={Cart} path="/cart"></PrivateRoute>
-          <Route component={NotFound} path="/404"></Route>
-          <Redirect to="/404"></Redirect>
-        </Switch>
-      </Router>
-    </div>
+    <SnackbarProvider maxSnack="1">
+      <div className="App">
+        <Router>
+          <Switch>
+            <Route component={Login} path="/" exact></Route>
+            <Route component={Register} path="/register"></Route>
+            <PrivateRoute component={Home} path="/all" exact></PrivateRoute>
+            <PrivateRoute
+              component={Category}
+              path="/category/:id"
+              exact
+            ></PrivateRoute>
+            <PrivateRoute
+              component={ProductDetails}
+              path="/product/:id"
+            ></PrivateRoute>
+            <PrivateRoute
+              component={WishedList}
+              path="/wishlist"
+            ></PrivateRoute>
+            <PrivateRoute component={Cart} path="/cart"></PrivateRoute>
+            <Route component={NotFound} path="/404"></Route>
+            <Redirect to="/404"></Redirect>
+          </Switch>
+        </Router>
+      </div>
+    </SnackbarProvider>
   );
 }
 

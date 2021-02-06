@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Info = styled.p`
-  position: absolute;
-  left: 50%;
-  transform: translate(-40%);
-  bottom: 5px;
   font-size: 12px;
 `;
 const Link = styled.a`

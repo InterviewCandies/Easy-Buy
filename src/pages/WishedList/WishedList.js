@@ -4,10 +4,18 @@ import Layout from "../../components/Layout/Layout";
 import Pagination from "../../containers/Pagination/Pagination";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../containers/SearchBar/SearchBar";
-import Tooltip from "react-tooltip-lite";
+import HeartIcon from "../../asset/img/heart.svg";
+import Wishlist from "../../asset/img/wishlist.svg";
 import { useHistory } from "react-router-dom";
-import { addToCart, isInCart } from "../../utils/checkStorageHelper";
+import { useSnackbar } from "notistack";
+import {
+  addToCart,
+  addToWishlist,
+  isInCart,
+} from "../../utils/checkStorageHelper";
 import { DEFAULT_COLOR } from "../../common";
+import { Tooltip } from "@material-ui/core";
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -17,6 +25,7 @@ const Grid = styled.div`
 
 const Container = styled.div`
   display: grid;
+  position: relative;
   background-color: #fff;
   border-radius: 16px;
   grid-template-columns: 200px 1fr;
@@ -34,6 +43,10 @@ const CardTitle = styled.h3`
   font-size: 18px;
   line-height: 16px;
   letter-spacing: 2px;
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 `;
 const CardSubtitle = styled.p`
   font-size: 12px;
@@ -72,10 +85,29 @@ const CartButton = styled.button`
   }
 `;
 
-function CardItem({ product }) {
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+`;
+function CardItem({ product, update }) {
   const history = useHistory();
+  const [, forcUpdate] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   return (
     <Container onClick={() => history.push("/product/" + product.id)}>
+      <Tooltip title="Remove from your wishlist" placement="right">
+        <Icon
+          src={HeartIcon}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToWishlist(product);
+            update();
+          }}
+        ></Icon>
+      </Tooltip>
       <CardImage src={product.image}></CardImage>
       <CardContent>
         <CardTitle>{product.name}</CardTitle>
@@ -88,7 +120,9 @@ function CardItem({ product }) {
           }
           onClick={(e) => {
             e.stopPropagation();
+            forcUpdate((it) => !it);
             addToCart(product);
+            enqueueSnackbar("Added to your cart", { variant: "success" });
           }}
         >
           Buy
@@ -103,6 +137,8 @@ const MAXIMUM_ITEM_PER_PAGE = 10;
 function WishedList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryKey, setQueryKey] = useState("");
+  const history = useHistory();
+  const [, forceUpdate] = useState(false);
   const products = JSON.parse(localStorage.getItem("favorite"));
 
   const filteredProducts = products?.filter((product) =>
@@ -110,36 +146,78 @@ function WishedList() {
   );
   const currentProducts = filteredProducts?.slice(
     (currentPage - 1) * MAXIMUM_ITEM_PER_PAGE,
-    Math.min(currentPage * MAXIMUM_ITEM_PER_PAGE, filteredProducts.length)
+    Math.min(currentPage * MAXIMUM_ITEM_PER_PAGE, filteredProducts?.length)
   );
 
   return (
     <div>
       <Layout>
-        <SearchBar
-          value={queryKey}
-          onChange={(text) => setQueryKey(text)}
-        ></SearchBar>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            padding: "20px 30px 5px 30px",
-          }}
-        >
-          <Pagination
-            itemsPerPage={MAXIMUM_ITEM_PER_PAGE}
-            datasetSize={products.length}
-            currentPage={currentPage}
-            onChange={(e) => setCurrentPage(e)}
-          ></Pagination>
-        </div>
-
-        <Grid>
-          {currentProducts.map((product) => (
-            <CardItem key={product.id} product={product}></CardItem>
-          ))}
-        </Grid>
+        {filteredProducts && filteredProducts.length ? (
+          <>
+            <SearchBar
+              value={queryKey}
+              onChange={(text) => setQueryKey(text)}
+            ></SearchBar>
+            {filteredProducts?.length ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  padding: "20px 30px 5px 30px",
+                }}
+              >
+                <Pagination
+                  itemsPerPage={MAXIMUM_ITEM_PER_PAGE}
+                  datasetSize={filteredProducts.length}
+                  currentPage={currentPage}
+                  onChange={(e) => setCurrentPage(e)}
+                ></Pagination>
+              </div>
+            ) : null}
+            <Grid>
+              {currentProducts?.map((product) => (
+                <CardItem
+                  key={product.id}
+                  product={product}
+                  update={() => forceUpdate((it) => !it)}
+                ></CardItem>
+              ))}
+            </Grid>
+          </>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={Wishlist}
+              style={{
+                maxWidth: "200px",
+                objectFit: "contain",
+                margin: "20px 0",
+              }}
+            ></img>
+            <CardTitle
+              style={{
+                textTransform: "uppercase",
+                fontSize: "1.5rem",
+                lineHeight: "1.5",
+              }}
+            >
+              Your wishlist is currently empty
+            </CardTitle>
+            <CardSubtitle style={{ fontSize: "0.8rem" }}>
+              Begin to add your favorite items into wishlist and buy them later
+            </CardSubtitle>
+            <Button width="250px" handleClick={() => history.push("/all")}>
+              Continue shopping
+            </Button>
+          </div>
+        )}
       </Layout>
     </div>
   );

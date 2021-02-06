@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Layout from "../../components/Layout/Layout";
 import Carousel from "react-elastic-carousel";
 import Logo from "../../components/Logo/Logo";
-import Button from "../../components/Button/Button";
+import EmptyCart from "../../asset/img/empty-cart.svg";
 import { SECONDARY_COLOR } from "../../common";
-
+import { Tooltip } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 const Grid = styled.div`
   display: grid;
   grid-gap: 30px;
@@ -30,6 +32,7 @@ const CardItem = styled.div`
   padding: 10px;
   height: 250px;
   align-items: center;
+  outline: none;
 `;
 const CardImage = styled.img`
   width: 150px;
@@ -41,6 +44,10 @@ const CardTitle = styled.h3`
   letter-spacing: 2px;
   margin: 5px;
   margin-bottom: 10px;
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 `;
 const CardSubtitle = styled.p`
   font-size: 12px;
@@ -70,64 +77,132 @@ const Recipe = styled.div`
 `;
 const Container = styled.div`
   position: relative;
-  top: 20%;
+  margin-top: 3rem;
   @media (max-width: 750px) {
-    top: 0;
+    margin-top: 10px;
+  }
+`;
+
+const Button = styled.button`
+  padding: 10px 10px;
+  background-color: ${(props) => props.color || "#0F56B3"};
+  width: ${(props) => props.width || "100%"};
+  max-width: 200px;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  &:hover {
+    background-color: #cecece;
   }
 `;
 function Cart() {
   let products = JSON.parse(localStorage.getItem("cart") || "[]");
   const [, forceUpdate] = useState(false);
+  const history = useHistory();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const handleRemoveProduct = (id) => {
     products = products.filter((product) => product.id !== id);
     forceUpdate((it) => !it);
     localStorage.setItem("cart", JSON.stringify(products));
   };
-  console.log(products);
+
+  const handleOrder = () => {
+    localStorage.removeItem("cart");
+    enqueueSnackbar("Order has been processed. Thank you!", {
+      variant: "info",
+    });
+    forceUpdate((it) => !it);
+  };
+
   let totalPrice = 0;
   products.forEach((product) => {
     totalPrice += Number(
       product.price.substring(1, product.price.length).split(",").join("")
     );
   });
+
   return (
     <Layout>
-      <Container>
-        <Grid>
-          <Recipe>
-            <p style={{ marginBottom: "10px" }}>Online Shopping Website</p>
-            <Logo size="1.5rem"></Logo>
-            <CardSubtitle style={{ marginTop: "10px", height: "auto" }}>
-              {"Date: " + new Date().toDateString()}
-            </CardSubtitle>
-            <CardSubtitle style={{ marginTop: "5px", height: "auto" }}>
-              Bill to {localStorage.getItem("user")}
-            </CardSubtitle>
-            <CardTitle style={{ marginTop: "10px" }}>
-              Total: ${totalPrice}
-            </CardTitle>
-            <Button>Order</Button>
-          </Recipe>
-          <Carousel>
-            {products.map((product) => (
-              <CardItem key={product.id}>
-                <CardImage src={product.image}></CardImage>
-                <CardContent>
-                  <CardTitle>{product.name}</CardTitle>
-                  <CardSubtitle>{product.description}</CardSubtitle>
-                  <h2>{product.price}</h2>
-                  <Button
-                    color={SECONDARY_COLOR}
-                    handleClick={() => handleRemoveProduct(product.id)}
-                  >
-                    Remove
-                  </Button>
-                </CardContent>
-              </CardItem>
-            ))}
-          </Carousel>
-        </Grid>
-      </Container>
+      {products.length ? (
+        <Container>
+          <Grid>
+            <Recipe>
+              <p style={{ marginBottom: "10px" }}>Online Shopping Website</p>
+              <Logo size="1.5rem"></Logo>
+              <CardSubtitle style={{ marginTop: "10px", height: "auto" }}>
+                {"Date: " + new Date().toDateString()}
+              </CardSubtitle>
+              <CardSubtitle style={{ marginTop: "5px", height: "auto" }}>
+                Bill to {localStorage.getItem("user")}
+              </CardSubtitle>
+              <CardTitle style={{ marginTop: "10px" }}>
+                Total: ${totalPrice}
+              </CardTitle>
+              <Button onClick={handleOrder}>Order</Button>
+            </Recipe>
+            <Carousel>
+              {products.map((product) => (
+                <CardItem key={product.id}>
+                  <CardImage src={product.image}></CardImage>
+                  <CardContent>
+                    <CardTitle>{product.name}</CardTitle>
+                    <CardSubtitle>{product.description}</CardSubtitle>
+                    <h2>{product.price}</h2>
+                    <Tooltip
+                      title="Remove this item from my cart"
+                      placement="right"
+                    >
+                      <Button
+                        color={SECONDARY_COLOR}
+                        onClick={() => handleRemoveProduct(product.id)}
+                      >
+                        Remove
+                      </Button>
+                    </Tooltip>
+                  </CardContent>
+                </CardItem>
+              ))}
+            </Carousel>
+          </Grid>
+        </Container>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={EmptyCart}
+            style={{
+              maxWidth: "200px",
+              objectFit: "contain",
+              margin: "20px 0",
+            }}
+          ></img>
+          <CardTitle
+            style={{
+              textTransform: "uppercase",
+              fontSize: "1.5rem",
+              lineHeight: "1.5",
+            }}
+          >
+            Your cart is currently empty
+          </CardTitle>
+          <CardSubtitle style={{ fontSize: "0.8rem" }}>
+            Look like you dont have any item in your shopping cart
+          </CardSubtitle>
+          <Button width="250px" onClick={() => history.push("/all")}>
+            Continue shopping
+          </Button>
+        </div>
+      )}
     </Layout>
   );
 }

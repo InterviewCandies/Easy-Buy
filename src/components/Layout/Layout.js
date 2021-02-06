@@ -17,17 +17,18 @@ const Content = styled.div`
   position: relative;
   text-align: center;
   width: 100%;
-  height: 100%;
 `;
 function Layout(props) {
   return (
     <Container>
       <Sidebar></Sidebar>
       <Content>
-        <Logo style={{ textAlign: "center" }}>
-          <span style={{ color: "#0F56B3" }}>Easy</span>Buy
-        </Logo>
-        {props.children}
+        <div style={{ minHeight: "calc(100vh-30px)" }}>
+          <Logo style={{ textAlign: "center" }}>
+            <span style={{ color: "#0F56B3" }}>Easy</span>Buy
+          </Logo>
+          {props.children}
+        </div>
         <Footer></Footer>
       </Content>
     </Container>

@@ -11,6 +11,7 @@ import {
   addToCart,
   addToWishlist,
 } from "../../utils/checkStorageHelper";
+import { useSnackbar } from "notistack";
 const Container = styled.div`
   background-color: white;
   width: 100%;
@@ -29,6 +30,10 @@ const CardTitle = styled.h3`
   font-size: 18px;
   line-height: 16px;
   letter-spacing: 2px;
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 `;
 const CardSubtitle = styled.p`
   font-size: 12px;
@@ -78,6 +83,8 @@ function Card({ product }) {
   const [favourite, setFavourite] = useState(isInWishList(product.id));
   const [, forceUpdate] = useState(false);
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
+
   return (
     <Container onClick={() => history.push("/product/" + product.id)}>
       <Tooltip
@@ -89,6 +96,14 @@ function Card({ product }) {
           onClick={(e) => {
             e.stopPropagation();
             addToWishlist(product);
+            enqueueSnackbar(
+              favourite
+                ? "Removed from your wishlist!"
+                : "Added to your wishlist!",
+              {
+                variant: "success",
+              }
+            );
             setFavourite((prevState) => !prevState);
           }}
         ></Icon>
@@ -111,6 +126,7 @@ function Card({ product }) {
               onClick={(e) => {
                 e.stopPropagation();
                 addToCart(product);
+                enqueueSnackbar("Added to your cart!", { variant: "success" });
                 forceUpdate((it) => !it);
               }}
               disabled={isInCart(product.id)}

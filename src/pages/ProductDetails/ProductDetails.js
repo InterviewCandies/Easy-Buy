@@ -4,7 +4,7 @@ import Layout from "../../components/Layout/Layout";
 import Card from "../../components/Card/Card";
 import Loader from "../../components/Loader/Loader";
 import Button from "../../components/Button/Button";
-import { SECONDARY_COLOR } from "../../common";
+import { DATASET_URL, SECONDARY_COLOR } from "../../common";
 import StarICon from "../../asset/img/star.svg";
 import EmptyStarIcon from "../../asset/img/empty-star.svg";
 import {
@@ -13,14 +13,15 @@ import {
   isInCart,
   isInWishList,
 } from "../../utils/checkStorageHelper";
+import { useSnackbar } from "notistack";
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 20px;
-  padding: 30px;
+  grid-gap: 25px;
+  padding: 20px;
   padding-top: 0px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 const MainCard = styled.div`
   background-color: #fff;
@@ -57,7 +58,8 @@ const CardContent = styled.div`
 const CardCategory = styled.h4`
   text-transform: uppercase;
   color: #6e798c;
-  margin-bottom: 0;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
   font-family: "Open Sans", sans-serif;
 `;
 const CardTitle = styled.h3`
@@ -65,9 +67,13 @@ const CardTitle = styled.h3`
   text-align: left;
   line-height: 16px;
   margin-top: 0;
+  text-transform: lowercase;
+  &:first-letter {
+    text-transform: capitalize;
+  }
 `;
 const CardPrice = styled.h2`
-  font-size: 36px;
+  font-size: 1.6rem;
 `;
 const CardSubtitle = styled.p`
   font-size: 16px;
@@ -114,9 +120,9 @@ const displaySize = (sizes) => {
 function ProductDetails() {
   const [products, setProducts] = useState(null);
   const [, forceUpdate] = useState(false);
-
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
-    fetch("http://www.json-generator.com/api/json/get/cfDTvIOuxu?indent=2")
+    fetch(DATASET_URL)
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);
@@ -135,7 +141,7 @@ function ProductDetails() {
           <MainCard>
             <CardImage src={product.image}></CardImage>
             <CardContent>
-              <CardCategory>{product.category}</CardCategory>
+              <CardCategory>{product.company}</CardCategory>
               <div
                 style={{
                   display: "flex",
@@ -144,13 +150,13 @@ function ProductDetails() {
                 }}
               >
                 <div>
-                  <CardTitle>{product.title}</CardTitle>
-                  {displayStar(product?.star)}
+                  <CardTitle>{product.name}</CardTitle>
+                  {displayStar(product?.stars)}
                 </div>
                 <CardPrice>{product.price}</CardPrice>
               </div>
 
-              {product.size && (
+              {product.sizes && (
                 <div style={{ display: "flex" }}>
                   {displaySize(product?.sizes)}
                 </div>
@@ -162,6 +168,9 @@ function ProductDetails() {
                   handleClick={() => {
                     addToCart(product);
                     forceUpdate((it) => !it);
+                    enqueueSnackbar("Added to your cart", {
+                      variant: "success",
+                    });
                   }}
                 >
                   Add to my cart
@@ -172,6 +181,9 @@ function ProductDetails() {
                   handleClick={() => {
                     addToWishlist(product);
                     forceUpdate((it) => !it);
+                    enqueueSnackbar("Added to your wishlist", {
+                      variant: "success",
+                    });
                   }}
                 >
                   Add to my wishlist
