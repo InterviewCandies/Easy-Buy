@@ -61,7 +61,7 @@ const CardContent = styled.div`
 `;
 const Recipe = styled.div`
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   box-sizing: border-box;
   height: min-content;
   background-color: #fff;

@@ -5,6 +5,9 @@ import Pagination from "../../containers/Pagination/Pagination";
 import Button from "../../components/Button/Button";
 import SearchBar from "../../containers/SearchBar/SearchBar";
 import Tooltip from "react-tooltip-lite";
+import { useHistory } from "react-router-dom";
+import { addToCart, isInCart } from "../../utils/checkStorageHelper";
+import { DEFAULT_COLOR } from "../../common";
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -19,6 +22,9 @@ const Container = styled.div`
   grid-template-columns: 200px 1fr;
   margin: 10px 30px;
   padding: 10px;
+  &:hover {
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  }
 `;
 const CardImage = styled.img`
   width: 200px;
@@ -67,14 +73,26 @@ const CartButton = styled.button`
 `;
 
 function CardItem({ product }) {
+  const history = useHistory();
   return (
-    <Container>
+    <Container onClick={() => history.push("/product/" + product.id)}>
       <CardImage src={product.image}></CardImage>
       <CardContent>
         <CardTitle>{product.name}</CardTitle>
         <CardSubtitle>{product.description}</CardSubtitle>
         <h2>{product.price}</h2>
-        <CartButton>Buy</CartButton>
+        <CartButton
+          disabled={isInCart(product.id)}
+          style={
+            isInCart(product.id) ? { backgroundColor: DEFAULT_COLOR } : null
+          }
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(product);
+          }}
+        >
+          Buy
+        </CartButton>
       </CardContent>
     </Container>
   );
@@ -84,11 +102,24 @@ const MAXIMUM_ITEM_PER_PAGE = 10;
 
 function WishedList() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [queryKey, setQueryKey] = useState("");
   const products = JSON.parse(localStorage.getItem("favorite"));
+
+  const filteredProducts = products?.filter((product) =>
+    product.name.toLocaleLowerCase().includes(queryKey.toLocaleLowerCase())
+  );
+  const currentProducts = filteredProducts?.slice(
+    (currentPage - 1) * MAXIMUM_ITEM_PER_PAGE,
+    Math.min(currentPage * MAXIMUM_ITEM_PER_PAGE, filteredProducts.length)
+  );
+
   return (
     <div>
       <Layout>
-        <SearchBar></SearchBar>
+        <SearchBar
+          value={queryKey}
+          onChange={(text) => setQueryKey(text)}
+        ></SearchBar>
         <div
           style={{
             display: "flex",
@@ -105,7 +136,7 @@ function WishedList() {
         </div>
 
         <Grid>
-          {products.map((product) => (
+          {currentProducts.map((product) => (
             <CardItem key={product.id} product={product}></CardItem>
           ))}
         </Grid>
