@@ -20,6 +20,10 @@ E-commercial website to buy stuff online. Personal project to learn about Fronte
 
 ![wishlist](./img/wishlist.PNG)
 
+### Cart
+
+![cart](./img/cart.PNG)
+
 ## Technologies
 
 - React
