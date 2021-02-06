@@ -51,19 +51,23 @@ function Pagination({ datasetSize, onChange, itemsPerPage, currentPage }) {
   const numberOfPages = Math.ceil(datasetSize / itemsPerPage);
   return (
     <Container>
-      <CustomButton
-        disabled={currentPage == 1}
-        onClick={() => onChange(currentPage - 1)}
-      >
-        Prev
-      </CustomButton>
-      {displayPages(numberOfPages)}
-      <CustomButton
-        disabled={currentPage == numberOfPages}
-        onClick={() => onChange(currentPage + 1)}
-      >
-        Next
-      </CustomButton>
+      {numberOfPages ? (
+        <>
+          <CustomButton
+            disabled={currentPage == 1}
+            onClick={() => onChange(currentPage - 1)}
+          >
+            Prev
+          </CustomButton>
+          {displayPages(numberOfPages)}
+          <CustomButton
+            disabled={currentPage >= numberOfPages}
+            onClick={() => onChange(currentPage + 1)}
+          >
+            Next
+          </CustomButton>
+        </>
+      ) : null}
     </Container>
   );
 }
