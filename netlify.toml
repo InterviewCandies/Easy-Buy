@@ -1,0 +1,9 @@
+[build]
+  command = "CLI= npm run build"
+  publish = "build/"
+
+[[redirects]]
+  from = "/api/*"
+  to = " http://www.json-generator.com/api/json/get/cebtltKYte?indent=2:splat"
+  status = 200
+  force = true
