@@ -126,8 +126,9 @@ function ProductDetails() {
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);
-  const url = window.location.pathname;
+  const url = window.location.hash;
   const id = url.substring(url.lastIndexOf("/") + 1);
+  console.log(url);
   const product = products?.find((product) => product.id == id);
   const filteredProducts = products?.filter(
     (p) => p.category === product.category && p.id != product.id

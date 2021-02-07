@@ -28,7 +28,7 @@ function Category() {
   const [queryKey, setQueryKey] = useState("");
 
   const history = useHistory();
-  const url = window.location.pathname;
+  const url = window.location.hash;
   const category = url.substring(url.lastIndexOf("/") + 1);
   if (!checkValidUrl(category)) history.push("/404");
 
