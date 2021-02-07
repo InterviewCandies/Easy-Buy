@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory, Link } from "react-router-dom";
-import ReactTooltip from "react-tooltip";
-import { Tooltip } from "@material-ui/core";
+import CustomTooltip from "../CustomTooltip/CustomTooltip";
 import HomeIcon from "../../asset/img/home.svg";
 import HangerIcon from "../../asset/img/tshirt.svg";
 import ShoeIcon from "../../asset/img/shoe.svg";
@@ -13,7 +12,7 @@ import UserIcon from "../../asset/img/user.svg";
 import SportIcon from "../../asset/img/sport.svg";
 import GithubIcon from "../../asset/img/github.svg";
 import CartIcon from "../../asset/img/cart.svg";
-import { PRIMARY_COLOR, DEFAULT_COLOR } from "../../common";
+import { PRIMARY_COLOR, DEFAULT_COLOR, AUTHEN_TOKEN } from "../../common";
 const Icon = styled.img`
   width: 30px;
   height: 30px;
@@ -50,81 +49,81 @@ function Sidebar() {
   return (
     <div>
       <Nav>
-        <Tooltip title="Home" placement="right">
+        <CustomTooltip title="Home" placement="right" arrow>
           <Link to="/all">
-            <NavItem active={currentPath.includes("/all")}>
+            <NavItem active={currentPath.includes("/all")} arrow>
               <Icon src={HomeIcon} alt="home"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Clothings" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Clothings" placement="right" arrow>
           <Link to="/category/clothings">
             <NavItem active={currentPath.includes("/clothings")}>
               <Icon src={HangerIcon} alt="hanger"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Shoes" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Shoes" placement="right" arrow>
           <Link to="/category/shoes">
             <NavItem active={currentPath.includes("/shoes")}>
               <Icon src={ShoeIcon} alt="shoe"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Toy" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Toy" placement="right" arrow>
           <Link to="/category/toy">
             <NavItem active={currentPath.includes("/toy")}>
               <Icon src={ToyIcon} alt="toy"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Electronics" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Electronics" placement="right" arrow>
           <Link to="/category/electronics">
             <NavItem active={currentPath.includes("/electronics")}>
               <Icon src={PhoneIcon} alt="phone"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Sports" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Sports" placement="right" arrow>
           <Link to="/category/sports">
             <NavItem active={currentPath.includes("/sports")}>
               <Icon src={SportIcon} alt="sport"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Wishlist" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Wishlist" placement="right" arrow>
           <Link to="/wishlist">
             <NavItem active={currentPath.includes("/wishlist")}>
               <Icon src={HeartIcon} alt="wishlist"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Shopping cart" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Shopping cart" placement="right" arrow>
           <Link to="/cart">
             <NavItem active={currentPath.includes("/cart")}>
               <Icon src={CartIcon} alt="cart"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Sign out" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Sign out" placement="right" arrow>
           <Link
             to="/"
             onClick={() => {
-              localStorage.removeItem("user");
+              localStorage.removeItem(AUTHEN_TOKEN);
             }}
           >
             <NavItem>
               <Icon src={UserIcon} alt="user"></Icon>
             </NavItem>
           </Link>
-        </Tooltip>
-        <Tooltip title="Github" placement="right">
+        </CustomTooltip>
+        <CustomTooltip title="Github" placement="right">
           <a href="https://github.com/InterviewCandies" target="_blank">
             <NavItem>
               <Icon src={GithubIcon} alt="github"></Icon>
             </NavItem>
           </a>
-        </Tooltip>
+        </CustomTooltip>
       </Nav>
     </div>
   );

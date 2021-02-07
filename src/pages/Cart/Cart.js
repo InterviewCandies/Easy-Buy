@@ -5,22 +5,39 @@ import Layout from "../../components/Layout/Layout";
 import Carousel from "react-elastic-carousel";
 import Logo from "../../components/Logo/Logo";
 import EmptyCart from "../../asset/img/empty-cart.svg";
-import { SECONDARY_COLOR } from "../../common";
-import { Tooltip } from "@material-ui/core";
+import {
+  AUTHEN_TOKEN,
+  CART,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
+} from "../../common";
+import {
+  Dialog,
+  Tooltip,
+  DialogContent,
+  Slide,
+  DialogActions,
+  DialogTitle,
+  ButtonBase,
+  Typography,
+} from "@material-ui/core";
 import { useSnackbar } from "notistack";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const Grid = styled.div`
   display: grid;
   grid-gap: 30px;
   padding: 0px 40px;
   position: relative;
-  grid-template-columns: 300px 2fr;
+  grid-template-columns: 1fr 2fr;
   margin-bottom: 30px;
   @media (max-width: 1000px) {
-    padding: 10px;
-  }
-  @media (max-width: 750px) {
     grid-template-columns: 1fr;
     grid-gap: 0;
+    padding: 10px;
   }
 `;
 const CardItem = styled.div`
@@ -98,24 +115,41 @@ const Button = styled.button`
     background-color: #cecece;
   }
 `;
+
+const DialogButton = styled.button`
+  padding: 10px 10px;
+  text-transform: uppercase;
+  background-color: #fff;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  color: ${(props) => props.color || "#000"};
+  &:hover {
+    background-color: ${(props) => props.color || "#cecece"};
+    color: #fff;
+  }
+`;
 function Cart() {
-  let products = JSON.parse(localStorage.getItem("cart") || "[]");
+  let products = JSON.parse(localStorage.getItem(CART) || "[]");
   const [, forceUpdate] = useState(false);
   const history = useHistory();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
 
   const handleRemoveProduct = (id) => {
     products = products.filter((product) => product.id !== id);
     forceUpdate((it) => !it);
-    localStorage.setItem("cart", JSON.stringify(products));
+    localStorage.setItem(CART, JSON.stringify(products));
   };
 
   const handleOrder = () => {
-    localStorage.removeItem("cart");
+    localStorage.removeItem(CART);
     enqueueSnackbar("Order has been processed. Thank you!", {
       variant: "info",
     });
     forceUpdate((it) => !it);
+    setOpen(false);
   };
 
   let totalPrice = 0;
@@ -137,12 +171,12 @@ function Cart() {
                 {"Date: " + new Date().toDateString()}
               </CardSubtitle>
               <CardSubtitle style={{ marginTop: "5px", height: "auto" }}>
-                Bill to {localStorage.getItem("user")}
+                Bill to {localStorage.getItem(AUTHEN_TOKEN)}
               </CardSubtitle>
               <CardTitle style={{ marginTop: "10px" }}>
-                Total: ${totalPrice}
+                Total: ${totalPrice.toFixed(2)}
               </CardTitle>
-              <Button onClick={handleOrder}>Order</Button>
+              <Button onClick={() => setOpen(true)}>Order</Button>
             </Recipe>
             <Carousel>
               {products.map((product) => (
@@ -153,6 +187,7 @@ function Cart() {
                     <CardSubtitle>{product.description}</CardSubtitle>
                     <h2>{product.price}</h2>
                     <Tooltip
+                      arrow
                       title="Remove this item from my cart"
                       placement="right"
                     >
@@ -168,6 +203,28 @@ function Cart() {
               ))}
             </Carousel>
           </Grid>
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            TransitionComponent={Transition}
+            keepMounted
+          >
+            <DialogTitle style={{ textAlign: "center" }}>
+              <Logo size="1.5rem"></Logo>
+            </DialogTitle>
+            <DialogContent>
+              <Typography variant="caption" style={{ fontSize: "1rem" }}>
+                Thank you for choosing us! Please click "OK" to confirm the
+                order.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <DialogButton color={PRIMARY_COLOR} onClick={handleOrder}>
+                OK
+              </DialogButton>
+              <DialogButton onClick={() => setOpen(false)}>Cancel</DialogButton>
+            </DialogActions>
+          </Dialog>
         </Container>
       ) : (
         <div

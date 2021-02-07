@@ -1,9 +1,10 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { PRIMARY_COLOR } from "../../common";
-import Button from "../../components/Button/Button";
-import { useHistory } from "react-router-dom";
 import Logo from "../../components/Logo/Logo";
+import Button from "../../components/Button/Button";
+
 const Container = styled.div`
   background-color: ${PRIMARY_COLOR};
   display: flex;
@@ -20,18 +21,19 @@ const Box = styled.div`
   text-align: center;
   border-radius: 16px;
 `;
-function NotFound() {
+
+function ErrorPage() {
   const history = useHistory();
   return (
     <Container>
       <Box>
         <Logo size="3rem"></Logo>
-        <h1 style={{ fontSize: "4rem", margin: "10px" }}>404</h1>
-        <h1>Page not found</h1>
+        <h1 style={{ fontSize: "4rem", margin: "10px" }}>OOPS !</h1>
+        <h1>Something went wrong</h1>
         <Button handleClick={() => history.push("/all")}>Go home</Button>
       </Box>
     </Container>
   );
 }
 
-export default NotFound;
+export default ErrorPage;

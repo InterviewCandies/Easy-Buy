@@ -90,6 +90,7 @@ function Card({ product }) {
       <Tooltip
         title={favourite ? "Remove from wishlist" : "Add to your wishlist"}
         placement="right"
+        arrow
       >
         <Icon
           src={favourite ? HeartIcon : HeartPlainIcon}
@@ -117,9 +118,9 @@ function Card({ product }) {
         <CardActions>
           <h3>{product.price}</h3>
           <Tooltip
-            title="Add to my cart"
+            title={isInCart(product.id) ? "" : "Add to my cart"}
             placement="right"
-            disableHoverListener={isInCart(product.id)}
+            arrow
           >
             <CartButton
               style={isInCart(product.id) ? { backgroundColor: "#cecece" } : {}}

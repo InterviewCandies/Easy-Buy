@@ -7,7 +7,7 @@ import User from "../../asset/img/user2.svg";
 import EmailIcon from "../../asset/img/email.svg";
 import ConfirmIcon from "../../asset/img/confirm.svg";
 import { withRouter } from "react-router-dom";
-import { PRIMARY_COLOR } from "../../common";
+import { AUTHEN_TOKEN, PRIMARY_COLOR } from "../../common";
 import { db } from "../../service/firebase";
 import ID from "../../utils/IdGenerator";
 import { hash } from "../../utils/hashHelper";
@@ -90,20 +90,7 @@ function Register(props) {
   const { register, handleSubmit, errors } = useForm();
   const [confirmedError, setConfirmedError] = useState(false);
   const [usernameError, setUsernameError] = useState("");
-  const checkDuplicateUsername = async (username) => {
-    let duplicate = false;
-    await db()
-      .ref("users")
-      .orderByChild("username")
-      .equalTo(username)
-      .on("value", async function (snapshot) {
-        if (snapshot.exists()) {
-          setUsernameError("That username is taken. Try another");
-          duplicate = true;
-        }
-      });
-    return duplicate;
-  };
+  const [checking, setChecking] = useState(false);
 
   const onSubmit = async (data) => {
     if (data.password !== data.confirmedPassword) {
@@ -112,32 +99,41 @@ function Register(props) {
       return;
     }
     try {
-      const duplicate = await checkDuplicateUsername(data.username);
-      console.log(duplicate);
-      if (!duplicate) {
-        await setUsernameError("");
-        await db()
-          .ref("users")
-          .child(ID())
-          .update(
-            {
-              username: data.username,
-              password: hash(data.password),
-              email: data.email,
-            },
-            function (error) {
-              if (error) {
-                setUsernameError("Something went wrong");
-              } else {
-                props.history.push("/all");
-              }
-            }
-          );
-      }
+      setChecking(true);
+      await db()
+        .ref("users")
+        .orderByChild("username")
+        .equalTo(data.username)
+        .on("value", async function (snapshot) {
+          if (snapshot.exists()) {
+            setUsernameError("That username is taken. Try another");
+          } else {
+            await setUsernameError("");
+            await db()
+              .ref("users")
+              .child(ID())
+              .update(
+                {
+                  username: data.username,
+                  password: hash(data.password),
+                  email: data.email,
+                },
+                function (error) {
+                  if (error) {
+                    setUsernameError("Something went wrong");
+                  } else {
+                    localStorage.setItem(AUTHEN_TOKEN, data.username);
+                    props.history.push("/all");
+                  }
+                }
+              );
+          }
+        });
     } catch (err) {
       console.log(err);
     }
     setConfirmedError(false);
+    setChecking(false);
   };
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -218,7 +214,8 @@ function Register(props) {
           </InputLabel>
           <Input
             type="password"
-            placeholder="Type your password"
+            onChange={() => setConfirmedError("")}
+            placeholder="Type your password again"
             name="confirmedPassword"
             ref={register({
               required: { value: true, message: "This field is required" },
@@ -229,7 +226,13 @@ function Register(props) {
           )}
         </FormControl>
         <FormControl style={{ marginTop: "20px" }}>
-          <Button type="submit">Sign up</Button>
+          <Button
+            type="submit"
+            disabled={checking}
+            style={checking ? { backgroundColor: "#cecece" } : null}
+          >
+            Sign up
+          </Button>
         </FormControl>
         <SmallText>
           Have an account? <Link href="/">Login now</Link>

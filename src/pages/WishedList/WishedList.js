@@ -13,7 +13,7 @@ import {
   addToWishlist,
   isInCart,
 } from "../../utils/checkStorageHelper";
-import { DEFAULT_COLOR } from "../../common";
+import { DEFAULT_COLOR, WISHLIST } from "../../common";
 import { Tooltip } from "@material-ui/core";
 
 const Grid = styled.div`
@@ -31,6 +31,11 @@ const Container = styled.div`
   grid-template-columns: 200px 1fr;
   margin: 10px 30px;
   padding: 10px;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
+
   &:hover {
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   }
@@ -44,6 +49,7 @@ const CardTitle = styled.h3`
   line-height: 16px;
   letter-spacing: 2px;
   text-transform: lowercase;
+  margin: 0;
   &:first-letter {
     text-transform: capitalize;
   }
@@ -92,13 +98,22 @@ const Icon = styled.img`
   right: 15px;
   top: 15px;
 `;
+
+const CardBrand = styled.h4`
+  text-transform: uppercase;
+  color: #6e798c;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  font-family: "Open Sans", sans-serif;
+`;
+
 function CardItem({ product, update }) {
   const history = useHistory();
   const [, forcUpdate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   return (
     <Container onClick={() => history.push("/product/" + product.id)}>
-      <Tooltip title="Remove from your wishlist" placement="right">
+      <Tooltip title="Remove from your wishlist" placement="right" arrow>
         <Icon
           src={HeartIcon}
           onClick={(e) => {
@@ -110,23 +125,30 @@ function CardItem({ product, update }) {
       </Tooltip>
       <CardImage src={product.image}></CardImage>
       <CardContent>
+        <CardBrand>{product.company}</CardBrand>
         <CardTitle>{product.name}</CardTitle>
         <CardSubtitle>{product.description}</CardSubtitle>
-        <h2>{product.price}</h2>
-        <CartButton
-          disabled={isInCart(product.id)}
-          style={
-            isInCart(product.id) ? { backgroundColor: DEFAULT_COLOR } : null
-          }
-          onClick={(e) => {
-            e.stopPropagation();
-            forcUpdate((it) => !it);
-            addToCart(product);
-            enqueueSnackbar("Added to your cart", { variant: "success" });
-          }}
+        <h2 style={{ margin: "10px 0" }}>{product.price}</h2>
+        <Tooltip
+          title={isInCart(product.id) ? "" : "Add to your cart"}
+          placement="right"
+          arrow
         >
-          Buy
-        </CartButton>
+          <CartButton
+            disabled={isInCart(product.id)}
+            style={
+              isInCart(product.id) ? { backgroundColor: DEFAULT_COLOR } : null
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+              forcUpdate((it) => !it);
+              addToCart(product);
+              enqueueSnackbar("Added to your cart", { variant: "success" });
+            }}
+          >
+            Buy
+          </CartButton>
+        </Tooltip>
       </CardContent>
     </Container>
   );
@@ -139,7 +161,7 @@ function WishedList() {
   const [queryKey, setQueryKey] = useState("");
   const history = useHistory();
   const [, forceUpdate] = useState(false);
-  const products = JSON.parse(localStorage.getItem("favorite"));
+  const products = JSON.parse(localStorage.getItem(WISHLIST));
 
   const filteredProducts = products?.filter((product) =>
     product.name.toLocaleLowerCase().includes(queryKey.toLocaleLowerCase())
