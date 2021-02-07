@@ -4,8 +4,7 @@ export const DEFAULT_COLOR = "#e2e2e2";
 export const WISHLIST = "wishlist";
 export const CART = "cart";
 export const AUTHEN_TOKEN = "authToken";
-export const DATASET_URL =
-  "http://www.json-generator.com/api/json/get/cebtltKYte?indent=2";
+export const DATASET_URL = "https://api.jsonbin.io/b/601fd28f81c79e442992adc4";
 export const CATEGORIES = [
   "clothings",
   "shoes",
