@@ -6,7 +6,7 @@ import Lock from "../../asset/img/lock.svg";
 import User from "../../asset/img/user2.svg";
 import EmailIcon from "../../asset/img/email.svg";
 import ConfirmIcon from "../../asset/img/confirm.svg";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { AUTHEN_TOKEN, PRIMARY_COLOR } from "../../common";
 import { db } from "../../service/firebase";
 import ID from "../../utils/IdGenerator";
@@ -60,10 +60,6 @@ const Subtitle = styled.p`
 `;
 const SmallText = styled.p`
   font-size: 0.75rem;
-`;
-const Link = styled.a`
-  text-decoration: none;
-  color: ${PRIMARY_COLOR};
 `;
 const Button = styled.button`
   padding: 10px 10px;
@@ -235,7 +231,10 @@ function Register(props) {
           </Button>
         </FormControl>
         <SmallText>
-          Have an account? <Link href="/">Login now</Link>
+          Have an account?{" "}
+          <Link to="/" style={{ textDecoration: "none", color: PRIMARY_COLOR }}>
+            Login now
+          </Link>
         </SmallText>
       </Box>
     </Container>

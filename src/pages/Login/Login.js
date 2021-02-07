@@ -6,7 +6,7 @@ import Lock from "../../asset/img/lock.svg";
 import User from "../../asset/img/user2.svg";
 import GithubIcon from "../../asset/img/github-big-logo.svg";
 import GoogleIcon from "../../asset/img/google.png";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AUTHEN_TOKEN, PRIMARY_COLOR, SECONDARY_COLOR } from "../../common";
 import { db } from "../../service/firebase";
 import { compare } from "../../utils/hashHelper";
@@ -71,10 +71,6 @@ const Subtitle = styled.p`
 `;
 const SmallText = styled.p`
   font-size: 0.75rem;
-`;
-const Link = styled.a`
-  text-decoration: none;
-  color: ${PRIMARY_COLOR};
 `;
 
 const Button = styled.button`
@@ -240,7 +236,12 @@ function Login() {
           </FormControl>
           <SmallText>
             Don't have an account yet?{" "}
-            <Link href="/register">Register now</Link>
+            <Link
+              to="/register"
+              style={{ textDecoration: "none", color: PRIMARY_COLOR }}
+            >
+              Register now
+            </Link>
           </SmallText>
         </Form>
         <hr style={{ border: "1px solid #cecece", width: "100%" }}></hr>

@@ -26,7 +26,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         localStorage.getItem(AUTHEN_TOKEN) ? (
           <Component {...props}></Component>
         ) : (
-          <Redirect to={{ pathname: "/", state: props.location }}></Redirect>
+          <Redirect to={{ pathname: "/" }}></Redirect>
         )
       }
     ></Route>
@@ -38,15 +38,14 @@ function App() {
     <ErrorBoundary FallbackComponent={ErrorPage}>
       <SnackbarProvider maxSnack="1">
         <div className="App">
-          <Router>
+          <Router basename={process.env.PUBLIC_URL}>
             <Switch>
               <Route component={Login} path="/" exact></Route>
               <Route component={Register} path="/register"></Route>
-              <PrivateRoute component={Home} path="/all" exact></PrivateRoute>
+              <PrivateRoute component={Home} path="/all"></PrivateRoute>
               <PrivateRoute
                 component={Category}
                 path="/category/:id"
-                exact
               ></PrivateRoute>
               <PrivateRoute
                 component={ProductDetails}
@@ -57,8 +56,7 @@ function App() {
                 path="/wishlist"
               ></PrivateRoute>
               <PrivateRoute component={Cart} path="/cart"></PrivateRoute>
-              <PrivateRoute component={NotFound} path="/404"></PrivateRoute>
-              <Redirect to="/404"></Redirect>
+              <Route path="*" component={NotFound}></Route>
             </Switch>
           </Router>
         </div>
