@@ -1,7 +1,7 @@
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Redirect,
   Switch,
