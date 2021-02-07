@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "/Easy-Buy/static/css/main.9fd7720c.chunk.css",
+    "main.js": "/Easy-Buy/static/js/main.edf93f94.chunk.js",
+    "main.js.map": "/Easy-Buy/static/js/main.edf93f94.chunk.js.map",
+    "runtime-main.js": "/Easy-Buy/static/js/runtime-main.531786c3.js",
+    "runtime-main.js.map": "/Easy-Buy/static/js/runtime-main.531786c3.js.map",
+    "static/js/2.59ae04fe.chunk.js": "/Easy-Buy/static/js/2.59ae04fe.chunk.js",
+    "static/js/2.59ae04fe.chunk.js.map": "/Easy-Buy/static/js/2.59ae04fe.chunk.js.map",
+    "static/js/3.b431c0dd.chunk.js": "/Easy-Buy/static/js/3.b431c0dd.chunk.js",
+    "static/js/3.b431c0dd.chunk.js.map": "/Easy-Buy/static/js/3.b431c0dd.chunk.js.map",
+    "index.html": "/Easy-Buy/index.html",
+    "static/css/main.9fd7720c.chunk.css.map": "/Easy-Buy/static/css/main.9fd7720c.chunk.css.map",
+    "static/js/2.59ae04fe.chunk.js.LICENSE.txt": "/Easy-Buy/static/js/2.59ae04fe.chunk.js.LICENSE.txt",
+    "static/media/cart.25d65fd4.svg": "/Easy-Buy/static/media/cart.25d65fd4.svg",
+    "static/media/cellphone.402e6d8a.svg": "/Easy-Buy/static/media/cellphone.402e6d8a.svg",
+    "static/media/confirm.8c7a4c41.svg": "/Easy-Buy/static/media/confirm.8c7a4c41.svg",
+    "static/media/email.83792d31.svg": "/Easy-Buy/static/media/email.83792d31.svg",
+    "static/media/empty-cart.916aede4.svg": "/Easy-Buy/static/media/empty-cart.916aede4.svg",
+    "static/media/empty-heart.c31d61db.svg": "/Easy-Buy/static/media/empty-heart.c31d61db.svg",
+    "static/media/empty-star.a1606b11.svg": "/Easy-Buy/static/media/empty-star.a1606b11.svg",
+    "static/media/github-big-logo.3a5ccf39.svg": "/Easy-Buy/static/media/github-big-logo.3a5ccf39.svg",
+    "static/media/github.3ba4a27c.svg": "/Easy-Buy/static/media/github.3ba4a27c.svg",
+    "static/media/heart.fb824694.svg": "/Easy-Buy/static/media/heart.fb824694.svg",
+    "static/media/home.8e2dd263.svg": "/Easy-Buy/static/media/home.8e2dd263.svg",
+    "static/media/lock.f292151d.svg": "/Easy-Buy/static/media/lock.f292151d.svg",
+    "static/media/not-found.f9828f0a.svg": "/Easy-Buy/static/media/not-found.f9828f0a.svg",
+    "static/media/shoe.2ead2fc7.svg": "/Easy-Buy/static/media/shoe.2ead2fc7.svg",
+    "static/media/sport.055e1cf5.svg": "/Easy-Buy/static/media/sport.055e1cf5.svg",
+    "static/media/star.de82f684.svg": "/Easy-Buy/static/media/star.de82f684.svg",
+    "static/media/toy.9992f706.svg": "/Easy-Buy/static/media/toy.9992f706.svg",
+    "static/media/tshirt.fe9314dd.svg": "/Easy-Buy/static/media/tshirt.fe9314dd.svg",
+    "static/media/user.c9b0c229.svg": "/Easy-Buy/static/media/user.c9b0c229.svg",
+    "static/media/user2.63108168.svg": "/Easy-Buy/static/media/user2.63108168.svg",
+    "static/media/wishlist.197591cb.svg": "/Easy-Buy/static/media/wishlist.197591cb.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.531786c3.js",
+    "static/js/2.59ae04fe.chunk.js",
+    "static/css/main.9fd7720c.chunk.css",
+    "static/js/main.edf93f94.chunk.js"
+  ]
+}
