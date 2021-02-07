@@ -1,12 +1,13 @@
-# Easy buy
+# EasyBuy
 
-E-commercial website to buy stuff online. Personal project to learn about Frontend development and practice with React.js
+E-commercial website to buy stuff online.  
+The main purpose of this project is to learn and pratice with Reactjs.
+
+## Website
+
+https://interviewcandies.github.io/Easy-Buy
 
 ## User Interface
-
-### Login
-
-![login](./img/login.PNG)
 
 ### Home
 
@@ -27,5 +28,31 @@ E-commercial website to buy stuff online. Personal project to learn about Fronte
 ## Technologies
 
 - React
-- Reduct
+- Firebase
 - Styled Components
+
+## What I learned
+
+- Features of react-router-dom such as { HashRouter, Switch, useHistory }
+- Firebase authentication
+- Error Boundary
+
+## Things to improve
+
+- Apply redux
+- Add Dark mode
+- Using Typescript
+- Build my own server
+
+## Credits
+
+- [react-hook-form](https://github.com/react-hook-form/react-hook-form)
+- [material-ui](https://github.com/mui-org/material-ui)
+- [react-elastic-carousel](https://github.com/sag1v/react-elastic-carousel)
+- [react-spinners](https://github.com/davidhu2000/react-spinners)
+- [react-error-boundary](https://github.com/bvaughn/react-error-boundary)
+
+## Contact
+
+- [Linkedin](https://www.linkedin.com/in/voqthang/)
+- Email: voquocthangit@gmail.com
