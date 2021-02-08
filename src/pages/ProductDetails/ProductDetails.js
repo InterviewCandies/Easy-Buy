@@ -15,6 +15,8 @@ import {
   isInWishList,
 } from "../../utils/checkStorageHelper";
 import { useSnackbar } from "notistack";
+import { Redirect, useHistory } from "react-router-dom";
+import NotFound from "../NotFound/NotFound";
 
 const Grid = styled.div`
   display: grid;
@@ -123,6 +125,7 @@ function ProductDetails() {
   const [, forceUpdate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [isLoaded, setIsLoaded] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     fetch(DATASET_URL)
@@ -133,88 +136,97 @@ function ProductDetails() {
   const url = window.location.hash;
   const id = url.substring(url.lastIndexOf("/") + 1);
   const product = products?.find((product) => product.id == id);
+
+  if (products && !product) {
+    history.push("/404");
+    return null;
+  }
+
   const filteredProducts = products?.filter(
-    (p) => p.category === product.category && p.id != product.id
+    (p) => p.category === product?.category && p.id != product?.id
   );
   const shuffled = filteredProducts?.sort(() => 0.5 - Math.random());
   const relatedProducts = shuffled?.slice(0, 5);
 
   return (
-    <Layout>
-      {products ? (
-        <>
-          <MainCard>
-            <CardImage
-              src={product.image}
-              onLoad={() => setIsLoaded(true)}
-              style={!isLoaded ? { display: "none" } : null}
-            ></CardImage>
-            {!isLoaded && <CardImage src={Fallback}></CardImage>}
-            <CardContent>
-              <CardCategory>{product.company}</CardCategory>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <CardTitle>{product.name}</CardTitle>
-                  {displayStar(product?.stars)}
-                </div>
-                <CardPrice>{product.price}</CardPrice>
-              </div>
-
-              {product.sizes && (
-                <div style={{ display: "flex" }}>
-                  {displaySize(product?.sizes)}
-                </div>
-              )}
-              <CardSubtitle>{product.description}</CardSubtitle>
-              <CardActions>
-                <Button
-                  disabled={isInCart(product.id)}
-                  handleClick={() => {
-                    addToCart(product);
-                    forceUpdate((it) => !it);
-                    enqueueSnackbar("Added to your cart", {
-                      variant: "success",
-                    });
+    <>
+      <Layout>
+        {products ? (
+          <>
+            <MainCard>
+              <CardImage
+                src={product.image}
+                onLoad={() => setIsLoaded(true)}
+                style={!isLoaded ? { display: "none" } : null}
+              ></CardImage>
+              {!isLoaded && <CardImage src={Fallback}></CardImage>}
+              <CardContent>
+                <CardCategory>{product.company}</CardCategory>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  Add to my cart
-                </Button>
-                <Button
-                  disabled={isInWishList(product.id)}
-                  color={SECONDARY_COLOR}
-                  handleClick={() => {
-                    addToWishlist(product);
-                    forceUpdate((it) => !it);
-                    enqueueSnackbar("Added to your wishlist", {
-                      variant: "success",
-                    });
-                  }}
-                >
-                  Add to my wishlist
-                </Button>
-              </CardActions>
-            </CardContent>
-          </MainCard>
+                  <div>
+                    <CardTitle>{product.name}</CardTitle>
+                    {displayStar(product?.stars)}
+                  </div>
+                  <CardPrice>{product.price}</CardPrice>
+                </div>
 
-          <h3 style={{ marginLeft: "30px", textAlign: "left" }}>
-            Similar products
-          </h3>
-          <Grid>
-            {relatedProducts.map((product) => (
-              <Card product={product} key={product.id}></Card>
-            ))}
-          </Grid>
-        </>
-      ) : (
-        <Loader></Loader>
-      )}
-    </Layout>
+                {product.sizes && (
+                  <div style={{ display: "flex" }}>
+                    {displaySize(product?.sizes)}
+                  </div>
+                )}
+                <CardSubtitle>{product.description}</CardSubtitle>
+                <CardActions>
+                  <Button
+                    disabled={isInCart(product.id)}
+                    handleClick={() => {
+                      addToCart(product);
+                      forceUpdate((it) => !it);
+                      enqueueSnackbar("Added to your cart", {
+                        variant: "success",
+                      });
+                    }}
+                  >
+                    Add to my cart
+                  </Button>
+                  <Button
+                    disabled={isInWishList(product.id)}
+                    color={SECONDARY_COLOR}
+                    handleClick={() => {
+                      addToWishlist(product);
+                      forceUpdate((it) => !it);
+                      enqueueSnackbar("Added to your wishlist", {
+                        variant: "success",
+                      });
+                    }}
+                  >
+                    Add to my wishlist
+                  </Button>
+                </CardActions>
+              </CardContent>
+            </MainCard>
+
+            <h3 style={{ marginLeft: "30px", textAlign: "left" }}>
+              Similar products
+            </h3>
+            <Grid>
+              {relatedProducts.map((product) => (
+                <Card product={product} key={product.id}></Card>
+              ))}
+            </Grid>
+          </>
+        ) : (
+          <Loader></Loader>
+        )}
+      </Layout>
+      )
+    </>
   );
 }
 

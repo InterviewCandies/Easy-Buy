@@ -50,13 +50,15 @@ function App() {
               <PrivateRoute
                 component={ProductDetails}
                 path="/product/:id"
+                exact
               ></PrivateRoute>
               <PrivateRoute
                 component={WishedList}
                 path="/wishlist"
               ></PrivateRoute>
               <PrivateRoute component={Cart} path="/cart"></PrivateRoute>
-              <Route path="*" component={NotFound}></Route>
+              <PrivateRoute component={NotFound} path="/404"></PrivateRoute>
+              <Redirect to="/404"></Redirect>
             </Switch>
           </Router>
         </div>
