@@ -30,7 +30,9 @@ function Home() {
   }, []);
 
   const filteredProducts = products?.filter((product) =>
-    product.name.toLocaleLowerCase().includes(queryKey.toLocaleLowerCase())
+    product.name
+      .toLocaleLowerCase()
+      .includes(queryKey.trim().toLocaleLowerCase())
   );
 
   const currentProducts = filteredProducts?.slice(

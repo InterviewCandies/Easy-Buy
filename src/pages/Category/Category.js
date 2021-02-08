@@ -43,7 +43,9 @@ function Category() {
   }, [category]);
 
   const filteredProducts = products?.filter((product) =>
-    product.name.toLocaleLowerCase().includes(queryKey.toLocaleLowerCase())
+    product.name
+      .toLocaleLowerCase()
+      .includes(queryKey.trim().toLocaleLowerCase())
   );
   const currentProducts = filteredProducts?.slice(
     (currentPage - 1) * MAXIMUM_ITEM_PER_PAGE,

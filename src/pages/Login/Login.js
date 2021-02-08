@@ -115,7 +115,6 @@ function Login() {
     let isAuth = localStorage.getItem(AUTHEN_TOKEN);
     if (isAuth && isAuth !== "undefined") {
       history.push("/all");
-      enqueueSnackbar("You need to log out first", { variant: "warning" });
     }
   }, []);
 
