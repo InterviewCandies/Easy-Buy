@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Layout from "../../components/Layout/Layout";
 import Carousel from "react-elastic-carousel";
 import Logo from "../../components/Logo/Logo";
+import Fallback from "../../asset/img/fallback.png";
 import EmptyCart from "../../asset/img/empty-cart.svg";
 import {
   AUTHEN_TOKEN,
@@ -134,6 +135,7 @@ function Cart() {
   let products = JSON.parse(localStorage.getItem(CART) || "[]");
   const [, forceUpdate] = useState(false);
   const history = useHistory();
+  const [isLoaded, setIsLoaded] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
 
@@ -181,7 +183,12 @@ function Cart() {
             <Carousel>
               {products.map((product) => (
                 <CardItem key={product.id}>
-                  <CardImage src={product.image}></CardImage>
+                  <CardImage
+                    src={product.image}
+                    onLoad={() => setIsLoaded(true)}
+                    style={!isLoaded ? { display: "none" } : null}
+                  ></CardImage>
+                  {!isLoaded && <CardImage src={Fallback}></CardImage>}
                   <CardContent>
                     <CardTitle>{product.name}</CardTitle>
                     <CardSubtitle>{product.description}</CardSubtitle>

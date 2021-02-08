@@ -6,6 +6,7 @@ import Loader from "../../components/Loader/Loader";
 import Button from "../../components/Button/Button";
 import { DATASET_URL, SECONDARY_COLOR } from "../../common";
 import StarICon from "../../asset/img/star.svg";
+import Fallback from "../../asset/img/fallback.png";
 import EmptyStarIcon from "../../asset/img/empty-star.svg";
 import {
   addToCart,
@@ -121,11 +122,14 @@ function ProductDetails() {
   const [products, setProducts] = useState(null);
   const [, forceUpdate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoaded, setIsLoaded] = useState(true);
+
   useEffect(() => {
     fetch(DATASET_URL)
       .then((response) => response.json())
       .then((data) => setProducts(data));
   }, []);
+
   const url = window.location.hash;
   const id = url.substring(url.lastIndexOf("/") + 1);
   const product = products?.find((product) => product.id == id);
@@ -134,12 +138,18 @@ function ProductDetails() {
   );
   const shuffled = filteredProducts?.sort(() => 0.5 - Math.random());
   const relatedProducts = shuffled?.slice(0, 5);
+
   return (
     <Layout>
       {products ? (
         <>
           <MainCard>
-            <CardImage src={product.image}></CardImage>
+            <CardImage
+              src={product.image}
+              onLoad={() => setIsLoaded(true)}
+              style={!isLoaded ? { display: "none" } : null}
+            ></CardImage>
+            {!isLoaded && <CardImage src={Fallback}></CardImage>}
             <CardContent>
               <CardCategory>{product.company}</CardCategory>
               <div

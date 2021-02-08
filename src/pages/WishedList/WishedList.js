@@ -13,6 +13,7 @@ import {
   addToWishlist,
   isInCart,
 } from "../../utils/checkStorageHelper";
+import Fallback from "../../asset/img/fallback.png";
 import { DEFAULT_COLOR, WISHLIST } from "../../common";
 import { Tooltip } from "@material-ui/core";
 
@@ -109,6 +110,7 @@ const CardBrand = styled.h4`
 
 function CardItem({ product, update }) {
   const history = useHistory();
+  const [isLoaded, setIsLoaded] = useState(false);
   const [, forcUpdate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   return (
@@ -123,7 +125,12 @@ function CardItem({ product, update }) {
           }}
         ></Icon>
       </Tooltip>
-      <CardImage src={product.image}></CardImage>
+      <CardImage
+        src={product.image}
+        onLoad={() => setIsLoaded(true)}
+        style={!isLoaded ? { display: "none" } : null}
+      ></CardImage>
+      {!isLoaded && <CardImage src={Fallback}></CardImage>}
       <CardContent>
         <CardBrand>{product.company}</CardBrand>
         <CardTitle>{product.name}</CardTitle>

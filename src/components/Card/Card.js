@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import CartIcon from "../../asset/img/cart.svg";
+import Fallback from "../../asset/img/fallback.png";
 import HeartIcon from "../../asset/img/heart.svg";
 import HeartPlainIcon from "../../asset/img/empty-heart.svg";
 import { Tooltip } from "@material-ui/core";
@@ -81,6 +81,7 @@ const CartButton = styled.button`
 
 function Card({ product }) {
   const [favourite, setFavourite] = useState(isInWishList(product.id));
+  const [isLoaded, setIsLoaded] = useState(false);
   const [, forceUpdate] = useState(false);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -109,7 +110,12 @@ function Card({ product }) {
           }}
         ></Icon>
       </Tooltip>
-      <CardImage src={product.image}></CardImage>
+      <CardImage
+        style={!isLoaded ? { display: "none" } : null}
+        src={product.image}
+        onLoad={() => setIsLoaded(true)}
+      ></CardImage>
+      {!isLoaded && <CardImage src={Fallback}></CardImage>}
       <CardContent>
         <CardTitle>{product.name}</CardTitle>
         <div>
